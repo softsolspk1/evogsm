@@ -57,7 +57,31 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        // TODO: Send Notifications to KAM and Distributor
+        // Send Notifications to KAM and Distributor
+        if (role === "SUB_ADMIN" && (finalKamId || distributorId)) {
+            console.log('📧 Notification: New order created by Sub-Admin');
+            console.log('Order ID:', newOrder.id);
+            console.log('Patient:', patientName);
+            console.log('City:', patientCity);
+
+            if (finalKamId) {
+                const kam = await prisma.user.findUnique({
+                    where: { id: finalKamId },
+                    select: { name: true, email: true }
+                });
+                console.log('🔔 Notify KAM:', kam?.name, '-', kam?.email);
+                // TODO: Implement actual push notification to KAM's app
+            }
+
+            if (distributorId) {
+                const distributor = await prisma.user.findUnique({
+                    where: { id: distributorId },
+                    select: { name: true, email: true }
+                });
+                console.log('🔔 Notify Distributor:', distributor?.name, '-', distributor?.email);
+                // TODO: Implement actual push notification to Distributor's app
+            }
+        }
 
         return NextResponse.json(newOrder, { status: 201 });
     } catch (error: any) {
@@ -111,8 +135,11 @@ export async function GET(request: NextRequest) {
             whereClause.kamId = userId;
         } else if (role === "DISTRIBUTOR") {
             whereClause.distributorId = userId;
-        } else if (role === "SUB_ADMIN" || role === "ADMIN") {
-            // Admin and Sub-Admin see all, filters already applied above
+        } else if (role === "SUB_ADMIN") {
+            // SUB_ADMIN: Only see orders they created
+            whereClause.subAdminId = userId;
+        } else if (role === "ADMIN") {
+            // Admin sees all, filters already applied above
         } else {
             // For any other role or undefined role, show all orders (treat as admin)
             // This allows flexibility for new roles without breaking the app

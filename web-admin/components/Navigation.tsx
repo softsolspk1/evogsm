@@ -34,9 +34,17 @@ export function Navigation() {
 
     const userRole = session?.user.role?.toLowerCase();
 
-    // In actual implementation, we'd filter by role. 
-    // For now showing all for Admin, and restricted for others.
-    const displayItems = userRole === "admin" ? navItems : navItems.filter(i => ["Dashboard", "Orders"].includes(i.name));
+    // Role-based navigation filtering
+    let displayItems = navItems;
+
+    if (userRole === "sub_admin") {
+        // SUB_ADMIN: Only show Dashboard and Orders
+        displayItems = navItems.filter(i => ["Dashboard", "Orders"].includes(i.name));
+    } else if (userRole !== "admin") {
+        // Non-admin, non-sub_admin: Show Dashboard and Orders only
+        displayItems = navItems.filter(i => ["Dashboard", "Orders"].includes(i.name));
+    }
+    // Admin sees all items
 
     return (
         <aside className="fixed left-0 top-0 h-screen w-72 bg-white border-r border-[#D2D2D7] z-40 transition-all duration-300 shadow-sm">
