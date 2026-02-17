@@ -100,15 +100,15 @@ export default function AreasPage() {
 
                         <form onSubmit={handleAddArea} className="space-y-6">
                             <div>
-                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2 flex items-center gap-2">
-                                    <select
-                                        value={newArea.cityId}
-                                        onChange={(e) => setNewArea({ ...newArea, cityId: e.target.value })}
-                                        className="w-full px-5 py-4 bg-white border border-[#D2D2D7] rounded-2xl focus:ring-2 focus:ring-[#0071E3] focus:border-transparent outline-none transition-all font-bold text-[#1D1D1F] appearance-none"
-                                    >
-                                        <option value="">Select City</option>
-                                        {cities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                                    </select>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Select City</label>
+                                <select
+                                    value={newArea.cityId}
+                                    onChange={(e) => setNewArea({ ...newArea, cityId: e.target.value })}
+                                    className="w-full px-5 py-4 bg-white border border-[#D2D2D7] rounded-2xl focus:ring-2 focus:ring-[#0071E3] focus:border-transparent outline-none transition-all font-bold text-[#1D1D1F] appearance-none"
+                                >
+                                    <option value="">Select City</option>
+                                    {cities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                </select>
                             </div>
 
                             <div>
