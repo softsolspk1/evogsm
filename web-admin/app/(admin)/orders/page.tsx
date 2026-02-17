@@ -339,78 +339,96 @@ export default function OrdersPage() {
 
                         <form onSubmit={handleCreateOrder} className="space-y-5">
                             <div className="grid grid-cols-2 gap-5">
-                                <input
-                                    placeholder="Patient Name"
-                                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
-                                    value={newOrder.patientName}
-                                    onChange={e => setNewOrder({ ...newOrder, patientName: e.target.value })}
+                                <div>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Patient Name</label>
+                                    <input
+                                        placeholder="Patient Name"
+                                        className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
+                                        value={newOrder.patientName}
+                                        onChange={e => setNewOrder({ ...newOrder, patientName: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Phone Number</label>
+                                    <input
+                                        placeholder="Phone Number"
+                                        className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
+                                        value={newOrder.patientPhone}
+                                        onChange={e => setNewOrder({ ...newOrder, patientPhone: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">City</label>
+                                <select
+                                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                                    value={newOrder.patientCity}
+                                    onChange={e => {
+                                        const selectedCity = e.target.value;
+                                        setNewOrder({ ...newOrder, patientCity: selectedCity });
+
+                                        // Auto-select KAM and Distributor based on city
+                                        if (selectedCity) {
+                                            const cityKAMs = kams.filter(k => k.cityId === cities.find(c => c.name === selectedCity)?.id);
+                                            const cityDistributors = distributors.filter(d => d.cityId === cities.find(c => c.name === selectedCity)?.id);
+
+                                            if (cityKAMs.length > 0) {
+                                                setNewOrder(prev => ({ ...prev, kamId: cityKAMs[0].id }));
+                                            }
+                                            if (cityDistributors.length > 0) {
+                                                setNewOrder(prev => ({ ...prev, distributorId: cityDistributors[0].id }));
+                                            }
+                                        }
+                                    }}
                                     required
-                                />
+                                >
+                                    <option value="">City</option>
+                                    {cities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Doctor Prescribe</label>
                                 <input
-                                    placeholder="Phone Number"
+                                    placeholder="Doctor Prescribe"
                                     className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
-                                    value={newOrder.patientPhone}
-                                    onChange={e => setNewOrder({ ...newOrder, patientPhone: e.target.value })}
+                                    value={newOrder.doctorPrescribe}
+                                    onChange={e => setNewOrder({ ...newOrder, doctorPrescribe: e.target.value })}
                                     required
                                 />
                             </div>
 
-                            <select
-                                className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
-                                value={newOrder.patientCity}
-                                onChange={e => {
-                                    const selectedCity = e.target.value;
-                                    setNewOrder({ ...newOrder, patientCity: selectedCity });
+                            <div>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Device Quantity</label>
+                                <select
+                                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                                    value={newOrder.deviceQuantity}
+                                    onChange={e => setNewOrder({ ...newOrder, deviceQuantity: e.target.value })}
+                                    required
+                                >
+                                    <option value="">No. of Device Order</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
 
-                                    // Auto-select KAM and Distributor based on city
-                                    if (selectedCity) {
-                                        const cityKAMs = kams.filter(k => k.cityId === cities.find(c => c.name === selectedCity)?.id);
-                                        const cityDistributors = distributors.filter(d => d.cityId === cities.find(c => c.name === selectedCity)?.id);
-
-                                        if (cityKAMs.length > 0) {
-                                            setNewOrder(prev => ({ ...prev, kamId: cityKAMs[0].id }));
-                                        }
-                                        if (cityDistributors.length > 0) {
-                                            setNewOrder(prev => ({ ...prev, distributorId: cityDistributors[0].id }));
-                                        }
-                                    }
-                                }}
-                                required
-                            >
-                                <option value="">City</option>
-                                {cities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                            </select>
-
-                            <input
-                                placeholder="Doctor Prescribe"
-                                className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
-                                value={newOrder.doctorPrescribe}
-                                onChange={e => setNewOrder({ ...newOrder, doctorPrescribe: e.target.value })}
-                                required
-                            />
-
-                            <select
-                                className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
-                                value={newOrder.deviceQuantity}
-                                onChange={e => setNewOrder({ ...newOrder, deviceQuantity: e.target.value })}
-                                required
-                            >
-                                <option value="">No. of Device Order</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select>
-
-                            <textarea
-                                placeholder="Home Delivery Address"
-                                className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium min-h-[100px]"
-                                value={newOrder.homeAddress}
-                                onChange={e => setNewOrder({ ...newOrder, homeAddress: e.target.value })}
-                                required
-                            />
+                            <div>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Home Delivery Address</label>
+                                <textarea
+                                    placeholder="Home Delivery Address"
+                                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium min-h-[100px]"
+                                    value={newOrder.homeAddress}
+                                    onChange={e => setNewOrder({ ...newOrder, homeAddress: e.target.value })}
+                                    required
+                                />
+                            </div>
 
                             <div className="grid grid-cols-2 gap-5">
                                 <select

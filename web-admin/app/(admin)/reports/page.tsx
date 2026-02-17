@@ -89,7 +89,7 @@ export default function ReportsPage() {
                         </h2>
                         <div className="space-y-4">
                             {stats?.kamPerformance?.map((kam: any) => (
-                                <div key={kam.name} className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
+                                <div key={kam.id} className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
                                     <span className="font-bold">{kam.name}</span>
                                     <div className="flex items-center gap-3">
                                         <span className="text-xs text-[#D2D2D7] font-bold uppercase">Converted</span>
