@@ -59,6 +59,8 @@ export default function PatientsPage() {
                     return acc;
                 }, []);
                 setPatients(uniquePatients);
+            } else {
+                console.error("Failed to fetch orders:", await res.text());
             }
         } catch (error) {
             console.error("Failed to fetch patients:", error);

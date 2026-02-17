@@ -71,8 +71,15 @@ export default function OrdersPage() {
     const fetchOrders = async () => {
         setLoading(true);
         try {
-            const query = new URLSearchParams(filters).toString();
-            const res = await fetch(`/api/orders?${query}`);
+            // Only include non-empty filter values
+            const queryParams: Record<string, string> = {};
+            if (filters.city) queryParams.city = filters.city;
+            if (filters.distributorId) queryParams.distributorId = filters.distributorId;
+            if (filters.kamId) queryParams.kamId = filters.kamId;
+            if (filters.status) queryParams.status = filters.status;
+
+            const query = new URLSearchParams(queryParams).toString();
+            const res = await fetch(`/api/orders${query ? `?${query}` : ''}`);
             if (res.ok) {
                 const data = await res.json();
                 setOrders(data);
