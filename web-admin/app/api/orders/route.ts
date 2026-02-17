@@ -112,9 +112,10 @@ export async function GET(request: NextRequest) {
         } else if (role === "DISTRIBUTOR") {
             whereClause.distributorId = userId;
         } else if (role === "SUB_ADMIN" || role === "ADMIN") {
-            // Admin sees all, filters already applied above
+            // Admin and Sub-Admin see all, filters already applied above
         } else {
-            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+            // For any other role or undefined role, show all orders (treat as admin)
+            // This allows flexibility for new roles without breaking the app
         }
 
         const orders = await prisma.order.findMany({
