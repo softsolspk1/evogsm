@@ -1,0 +1,23 @@
+
+> auth@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 7.1s
+  Running TypeScript ...
+Failed to compile.
+
+./proxy.ts:17:21
+Type error: Property 'is_verified' does not exist on type '{ id: string; createdAt: Date; updatedAt: Date; email: string; emailVerified: boolean; name: string; image?: string | null | undefined; }'.
+
+  15 |     // Verification check
+  16 |     if (
+> 17 |       !session.user.is_verified &&
+     |                     ^
+  18 |       pathname !== "/verify" &&
+  19 |       !pathname.startsWith("/api")
+  20 |     ) {
+Next.js build worker exited with code: 1 and signal: null

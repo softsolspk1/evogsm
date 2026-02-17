@@ -1,0 +1,98 @@
+CGM DEVICE APP:
+
+Android App
+Admin Panel
+
+
+Modules:
+- KAM App  (key Account Manager)
+- Distributor App
+- Sub Admin App (for Order Form) 
+- Super Admin Panel
+
+
+Flow:
+1. Kam will place an Order taken from Doctor / Patient directly or referred by other team members.
+2. Order Received to Company Admin and Distributor
+3. Order confirm by Company Admin from Patient 
+5. Notification send to respective KAM and Respective Distributor
+6. Order will also showe in Distributor App
+7. KAM will go to Patient Address and apply CGM Device to patient.
+8. Post adminsitration Form will Open and must filled by KAM including Patient's Name, Active Email address and Ative Phone Number.
+9. Journey completed 
+
+
+Order Form:  (Filled by KAM and Sub-Admin)
+Patient Name:
+Patient Phone Number:
+Patient Address City:
+Home Address:
+The Order automatically sent to Respective KAM and Distrbutor and Notification will be send.
+
+
+When the Device installed to Patient Home then following form will be filled:
+
+Post Administration Form Fields:
+Timestamp
+KAM/DE Name	
+KAM/DE Employee Code	
+Region  
+City (Drop Down City of Pakistan)  
+Area (Area of Selected City)
+Referred By (SM/RTL Name, if not than write your own name)	
+Employee Code (Referral, if not then write your own code)	
+Referral Team (if not than write your own team name)	
+Doctor Name	
+Doctor Code (if not in your list write just "000000" )	
+Service Provider Name	(Distributor)
+Patient Name	
+Patient Area	
+Sensor Installed By	
+Visit Date	
+Visit Time	
+Number of CGM Devices	
+Patient Email	
+Patient WhatsApp Number	
+First Activation Date	
+Comments/Feedback	
+CGM Serial Number	
+KAM	Reminder
+
+
+Analytics:
+Realtime analytics showing on Admn Dashboard for:
+- Today's Orders
+- Monthly Orders
+- KAM's performance
+- Doctors prescribed amd their details filter by KAM, City and Province
+- Re-Orders details
+- Referral Details
+- City Wise -----> Area Wise Reproting
+- Service Provider Name	(Distributor) Reporting
+- Inventory Status Nationwide, Service Provider Name	(Distributor), City Wise
+
+
+
+Sub-Admin:
+Need a Sub-Admin Role in Web Admin/App to Place an Order only.
+
+
+Use Corporate Color of PharmEvo:
+Light Blue
+
+
+Product:
+/product.jpg is available
+
+Pharmevo Logo:
+/logo.png
+
+
+Web Admin: Next JS
+Web Admin Backend: Next JS APIs
+Mobile App on Expo
+Mobile App Backend: Node JS
+
+
+Now ACT as a Senior Developer / Project Manager and Develop and Test Everything.
+

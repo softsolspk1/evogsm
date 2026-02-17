@@ -1,0 +1,467 @@
+--- Row 1 ---
+Empty
+--- Row 2 ---
+0: Timestamp
+1: KAM/DE Name
+2: KAM/DE Employee Code
+3: Region
+4: Referred By (SM/RTL Name, if not than write your own name)
+5: Employee Code (Referral, if not then write your own code)
+6: Referral Team (if not than write your own team name)
+7: Doctor Name
+8: Doctor Code (if not in your list write just "000000" )
+9: Service Provider Name
+10: Patient Name
+11: Patient Area
+12: Sensor Installed By
+13: Visit Date
+14: Visit Time
+15: Number of CGM Devices
+16: Patient Email
+17: Patient WhatsApp Number
+18: First Activation Date
+19: Comments/Feedback
+20: CGM Serial Number
+21: KAM
+22: Reminder
+--- Row 3 ---
+0: 12/26/2025 18:51:52
+1: Malik Muhammad Awais Khan
+2: 10580
+3: Peshawar
+4: Malik Muhammad Awais Khan
+5: 10580
+6: Aviators
+7: Dr. Ibrar Ahmad
+8: 0
+9: JUNAID MEDICOSE DISTRIBUTORS
+10: Maheen
+11: Hayatabad phase 2
+12: Malik Awais
+13: 12/23/2025
+14: Evening
+15: 1
+16: maheensaif@gmail.com
+17: 3339090619
+18: 12/23/2025
+20: 0
+21: Malik Muhammad Awais Khan
+22: #N/A
+24: 12/26/2025
+28: 12/26/2025
+--- Row 4 ---
+0: 12/27/2025 23:04:20
+1: Muhammad Waseem
+2: 10578
+3: Faisalabad
+4: Aviator
+5: 10578
+6: Aviator
+7: Dr. Yousaf Ikram
+8: 0
+9: AIM DISTRIBUTOR FAISALABAD
+10: Dr yousaf ikram Mother
+11: Sitara villas
+12: Muhammad Waseem
+13: 12/23/2025
+14: .
+15: 1
+16: drwaseem403@gmail.com
+17: +92 305 7671234
+18: 2025-06-12 00:00:00
+20: .
+21: Muhammad Waseem
+22: #N/A
+24: 12/27/2025
+28: 12/27/2025
+--- Row 5 ---
+0: 12/28/2025 0:35:51
+1: Muhammad Waseem
+2: 10578
+3: Faisalabad
+4: Muhammad Waseem
+5: 10578
+6: Aviator
+7: NA
+8: 0
+9: AIM DISTRIBUTOR FAISALABAD
+10: Irahad
+11: Eden garden
+12: Muhammad Waseem
+13: 12/23/2025
+14: .
+15: 1
+16: drwaseem403@gmail.com
+17: +92 300 8655247
+18: 12/23/2025
+20: .
+21: Muhammad Waseem
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 6 ---
+0: 12/28/2025 0:37:23
+1: Muhammad Waseem
+2: 10578
+3: Faisalabad
+4: Muhammad Waseem
+5: 10578
+6: Aviator
+7: Dr. Yousaf Ikram
+8: 0
+9: AIM DISTRIBUTOR FAISALABAD
+10: Dr yousaf ikram Mother
+11: Sitara villas
+12: Muhammad Waseem
+13: 12/23/2025
+14: .
+15: 1
+16: drwaseem403@gmail.com
+17: +92 305 7671234
+18: 2025-07-12 00:00:00
+20: .
+21: Muhammad Waseem
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 7 ---
+0: 12/28/2025 0:41:00
+1: Muhammad Waseem
+2: 10578
+3: Faisalabad
+4: Muhammad Waseem
+5: 10578
+6: Aviator
+7: Dr. Ijaz Anwar
+8: 0
+9: AIM DISTRIBUTOR FAISALABAD
+10: Haji haneef
+11: Officer colony
+12: Muhammad Waseem
+13: 12/23/2025
+14: .
+15: 1
+16: drwaseem403@gmail.com
+17: 3008664278
+18: 12/23/2025
+20: .
+21: Muhammad Waseem
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 8 ---
+0: 12/28/2025 0:42:29
+1: Muhammad Waseem
+2: 10578
+3: Faisalabad
+4: Muhammad Waseem
+5: 10578
+6: Aviator
+7: Dr. Saqib
+8: 0
+9: AIM DISTRIBUTOR FAISALABAD
+10: Dr Zahid
+11: Wapda city
+12: Muhammad Waseem
+13: 12/23/2025
+14: .
+15: 1
+16: drwaseem403@gmail.com
+17: +92 321 6622018
+18: 12/28/2025
+20: .
+21: Muhammad Waseem
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 9 ---
+0: 12/28/2025 0:44:25
+1: Muhammad Waseem
+2: 10578
+3: Faisalabad
+4: Muhammad Waseem
+5: 10578
+6: Aviator
+7: Dr. Yasir mufti
+8: 0
+9: AIM DISTRIBUTOR FAISALABAD
+10: Dr tahir
+11: Muslim town B
+12: .
+13: 12/23/2025
+14: .
+15: 1
+16: tahirhabib0322@gmail.com
+17: +92 322 6015964
+18: 12/28/2025
+20: .
+21: Muhammad Waseem
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 10 ---
+0: 12/28/2025 19:12:22
+1: Hassan Abbas
+2: 10605
+3: Lahore
+4: Hassan Abbas
+5: 10605
+6: Aviator
+7: Dr. Mateen Hutiyana
+8: 7327
+9: ONCOCARE PHARMACY
+10: Naveed nazir
+11: Shalimar
+12: Me
+13: 12/23/2025
+14: 8pm
+15: 1
+16: naveed@gmail.com
+17: +92 300 6666048
+18: 11/13/2025
+20: 0
+21: Hassan Abbas
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 11 ---
+0: 12/28/2025 19:14:00
+1: Hassan Abbas
+2: 10605
+3: Lahore
+4: Hassan Abbas
+5: 10605
+6: Aviator
+7: Dr. Mateen Hutiyana
+8: 7327
+9: ONCOCARE PHARMACY
+10: Javeria
+11: Model town
+12: Me
+13: 12/23/2025
+14: 11am
+15: 1
+16: javeria@gmail.com
+17: +92 326 8003759
+18: 12/23/2025
+20: 0
+21: Hassan Abbas
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 12 ---
+0: 12/28/2025 19:15:31
+1: Hassan Abbas
+2: 10605
+3: Lahore
+4: Hassan Abbas
+5: 10605
+6: Aviator
+7: Dr. Mateen Hutiyana
+8: 7327
+9: ONCOCARE PHARMACY
+10: Sana Tanveer
+11: Lalamusa
+12: Patient
+13: 12/23/2025
+14: 1pm
+15: 1
+16: sana@gmail.com
+17: +92 334 4638814
+18: 11/13/2025
+20: 0
+21: Hassan Abbas
+22: #N/A
+24: 12/28/2025
+28: 12/28/2025
+--- Row 13 ---
+0: 12/29/2025 12:29:09
+1: Muhammad Aftab Sajid
+2: 10572
+3: Multan
+4: Muhammad Aftab Sajid
+5: Muhammad Aftab Sajid
+6: Aviator
+7: NA
+8: 0
+9: RIZWAN MEDICINE COMPANY
+10: M Amin
+11: Gulghusht
+12: Muhammad Aftab Sajid
+13: 12/23/2025
+14: 11:00:00
+15: 1
+16: Aftabsajid77@gmail.com
+17: 3008631119
+18: 12/23/2025
+20: 0
+21: Muhammad Aftab Sajid
+22: #N/A
+24: 12/29/2025
+28: 12/29/2025
+--- Row 14 ---
+0: 12/29/2025 12:36:49
+1: Muhammad Aftab Sajid
+2: 10572
+3: Multan
+4: Muhammad Aftab Sajid
+5: 10572
+6: Aviator
+7: NA
+8: 0
+9: RIZWAN MEDICINE COMPANY
+10: Rana Shahzad
+11: Sehar vilaz
+12: Muhammad Aftab Sajid
+13: 11/23/2025
+14: 4pm
+15: 1
+16: Aftabsajid77@gmail.com
+17: 3008663530
+18: 12/23/2025
+20: 0
+21: Muhammad Aftab Sajid
+22: #N/A
+24: 12/29/2025
+28: 12/29/2025
+--- Row 15 ---
+0: 12/29/2025 12:45:48
+1: Muhammad Aftab Sajid
+2: 10572
+3: Multan
+4: Muhammad Aftab Sajid
+5: 10572
+6: Aviator
+7: NA
+8: 0
+9: RIZWAN MEDICINE COMPANY
+10: Rana Shahzad
+11: Sehar vilaz
+12: Muhammad Aftab Sajid
+13: 12/23/2025
+14: 14:00:00
+15: 1
+16: Aftabsajid77@gmail.com
+17: 3008663530
+18: 12/23/2025
+20: 0
+21: Muhammad Aftab Sajid
+22: #N/A
+24: 12/29/2025
+28: 12/29/2025
+--- Row 16 ---
+0: 12/30/2025 20:02:35
+1: Hassan Abbas
+2: 10605
+3: Lahore
+4: Hassan Abbas
+5: 10605
+6: Aviator
+7: NA
+8: 0
+9: ONCOCARE PHARMACY
+10: Sana Tanveer
+11: Lalamusa
+12: Patient
+13: 12/23/2025
+14: 1pm
+15: 1
+16: sana@gmail.com
+17: +92 334 4638814
+18: 12/16/2025
+20: 0
+21: Hassan Abbas
+22: #N/A
+24: 12/30/2025
+28: 12/30/2025
+--- Row 17 ---
+0: 1/23/2026 10:47:00
+1: Malik Muhammad Awais Khan
+2: 10580
+3: Peshawar
+4: Samiullah jan
+5: Samiullah Jan, 83
+6: Aviators
+7: Malik Awais
+8: 0
+9: JUNAID MEDICOSE DISTRIBUTORS
+10: Hammad Ihsan
+11: Skhakot
+12: Malik Muhammad Awais Khan
+13: 1/23/2026
+14: 10:46:00
+15: 1
+16: hammadkhan78@gmail.com
+17: 3359033830
+18: 1/23/2026
+20: 2222276UZG
+21: Malik Muhammad Awais Khan
+22: #N/A
+--- Row 18 ---
+0: 1/23/2026 10:51:42
+1: Malik Muhammad Awais Khan
+2: 10580
+3: Peshawar
+4: Samiullah jam
+5: Samiullah Jan, 83
+6: Aviators
+7: Malik Awais
+8: 0
+9: JUNAID MEDICOSE DISTRIBUTORS
+10: Hammad Ihsan
+11: Skhakot
+12: Malik Muhammad Awais Khan
+13: 1/23/2026
+14: 10:43:00
+15: 1
+16: hammadkhan78@gmail.com
+17: 3359033830
+18: 1/23/2026
+20: 2222276W56
+21: Malik Muhammad Awais Khan
+22: #N/A
+--- Row 19 ---
+0: 1/23/2026 11:13:38
+1: Qudarat Ullah
+2: P-Evo-115
+3: Islamabad
+4: Dr Ali Arif
+5: P-evo-115
+6: Aviators
+7: Dr Ali arif
+8: 52342
+9: LIFE LINE DISTRIBUTORS
+10: Shah pervez
+11: Islamabad
+12: Qudarat Ullah
+13: 1/23/2026
+14: 10:00:00
+15: 1
+17: +92 302 5599967
+18: 1/23/2026
+19: Done
+20: 2222276Y8H
+21: Qudarat Ullah
+22: #N/A
+--- Row 20 ---
+0: 1/23/2026 12:06:38
+1: Hanook
+2: 10576
+3: Rawalpindi
+4: Hanook
+5: 10576
+6: Aviators
+7: Hassan attique
+8: 62352
+9: LIFE LINE DISTRIBUTORS
+10: Ahmad younis
+11: Rawalpindi
+12: Hanook
+13: 1/23/2026
+14: 12:00:00
+15: 1
+17: 3084256765
+18: 1/23/2026
+20: 2222277D9B
+21: Hanook
+22: #N/A

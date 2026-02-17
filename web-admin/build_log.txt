@@ -1,0 +1,23 @@
+
+> auth@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 7.5s
+  Running TypeScript ...
+Failed to compile.
+
+./app/api/admin/users/route.ts:47:30
+Type error: Argument of type 'string' is not assignable to parameter of type 'TemplateStringsArray'.
+
+  45 |     // In production, you'd want more robust validation.
+  46 |     const query = `UPDATE users SET ${keys.map((key, i) => `${key} = $${i + 2}`).join(", ")} WHERE id = $1 RETURNING *`;
+> 47 |     const result = await sql(query, [id, ...values]);
+     |                              ^
+  48 |
+  49 |     return NextResponse.json(result[0]);
+  50 |   } catch (error) {
+Next.js build worker exited with code: 1 and signal: null

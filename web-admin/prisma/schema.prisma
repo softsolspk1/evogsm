@@ -1,0 +1,268 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters", "multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["neon_auth", "public"]
+}
+
+model User {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  email         String       @unique
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  role          String?
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?    @db.Timestamptz(6)
+  
+  // Custom fields
+  employeeCode  String?
+  isVerified    Boolean      @default(false)
+
+  // Auth Relations
+  account       account[]
+  invitation    invitation[]
+  member        member[]
+  session       session[]
+  
+  // Custom Relations
+  orders        Order[]      @relation("KAMOrders")
+  assignedOrders Order[]     @relation("DistributorOrders")
+  createdOrders Order[]      @relation("SubAdminOrders")
+
+  // Hierarchical Management
+  cityId        String?
+  city          City?         @relation(fields: [cityId], references: [id])
+  areaId        String?
+  area          Area?         @relation(fields: [areaId], references: [id])
+  
+  // KAM -> Distributor relationship
+  distributorId String?       @db.Uuid
+  primaryDistributor User?    @relation("KAMToDistributor", fields: [distributorId], references: [id])
+  assignedKAMs  User[]        @relation("KAMToDistributor")
+
+  @@map("user")
+  @@schema("neon_auth")
+}
+
+model account {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId             String
+  providerId            String
+  userId                String    @db.Uuid
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime? @db.Timestamptz(6)
+  refreshTokenExpiresAt DateTime? @db.Timestamptz(6)
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime  @db.Timestamptz(6)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([userId])
+  @@schema("neon_auth")
+}
+
+model invitation {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String       @db.Uuid
+  email          String
+  role           String?
+  status         String
+  expiresAt      DateTime     @db.Timestamptz(6)
+  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+  inviterId      String       @db.Uuid
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  organization   organization @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([email])
+  @@index([organizationId])
+  @@schema("neon_auth")
+}
+
+model jwks {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  publicKey  String
+  privateKey String
+  createdAt  DateTime  @db.Timestamptz(6)
+  expiresAt  DateTime? @db.Timestamptz(6)
+
+  @@schema("neon_auth")
+}
+
+model member {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String       @db.Uuid
+  userId         String       @db.Uuid
+  role           String
+  createdAt      DateTime     @db.Timestamptz(6)
+  organization   organization @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@schema("neon_auth")
+}
+
+model organization {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  slug       String       @unique
+  logo       String?
+  createdAt  DateTime     @db.Timestamptz(6)
+  metadata   String?
+  invitation invitation[]
+  member     member[]
+
+  @@schema("neon_auth")
+}
+
+model project_config {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name               String
+  endpoint_id        String   @unique
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime @default(now()) @db.Timestamptz(6)
+  trusted_origins    Json
+  social_providers   Json
+  email_provider     Json?
+  email_and_password Json?
+  allow_localhost    Boolean
+
+  @@schema("neon_auth")
+}
+
+model session {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  expiresAt            DateTime @db.Timestamptz(6)
+  token                String   @unique
+  createdAt            DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime @db.Timestamptz(6)
+  ipAddress            String?
+  userAgent            String?
+  userId               String   @db.Uuid
+  impersonatedBy       String?
+  activeOrganizationId String?
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([userId])
+  @@schema("neon_auth")
+}
+
+model verification {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([identifier])
+  @@schema("neon_auth")
+}
+
+enum Role {
+  ADMIN
+  KAM
+  DISTRIBUTOR
+  SUB_ADMIN
+  @@schema("public")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  @@schema("public")
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  patientName       String
+  patientPhone      String
+  patientCity       String
+  homeAddress       String
+  status            OrderStatus @default(PENDING)
+  
+  // Relations
+  kamId             String?     @db.Uuid
+  kam               User?       @relation("KAMOrders", fields: [kamId], references: [id])
+  
+  distributorId     String?     @db.Uuid
+  distributor       User?       @relation("DistributorOrders", fields: [distributorId], references: [id])
+  
+  subAdminId        String?     @db.Uuid
+  subAdmin          User?       @relation("SubAdminOrders", fields: [subAdminId], references: [id])
+  
+  installation      DeviceInstallation?
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  @@schema("public")
+}
+
+model DeviceInstallation {
+  id                String   @id @default(cuid())
+  orderId           String   @unique
+  order             Order    @relation(fields: [orderId], references: [id])
+  
+  timestamp         DateTime @default(now())
+  kamName           String
+  kamEmployeeCode   String
+  region            String
+  city              String
+  area              String
+  referredBy        String
+  referralEmployeeCode String
+  referralTeam      String
+  doctorName        String
+  doctorCode        String
+  distributorName   String
+  patientName       String
+  patientArea       String
+  sensorInstalledBy String
+  visitDate         String
+  visitTime         String
+  numDevices        Int
+  patientEmail      String
+  patientWhatsApp   String
+  activationDate    String
+  comments          String?
+  serialNumber      String
+  kamReminder       Boolean  @default(false)
+  
+  createdAt         DateTime @default(now())
+  
+  @@schema("public")
+}
+model City {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  areas     Area[]
+  users     User[]
+  createdAt DateTime @default(now())
+  
+  @@schema("public")
+}
+
+model Area {
+  id        String   @id @default(cuid())
+  name      String
+  cityId    String
+  city      City     @relation(fields: [cityId], references: [id])
+  users     User[]
+  createdAt DateTime @default(now())
+
+  @@unique([name, cityId])
+  @@schema("public")
+}
