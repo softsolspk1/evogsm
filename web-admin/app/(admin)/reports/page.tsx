@@ -27,7 +27,7 @@ export default function ReportsPage() {
     const MetricCard = ({ label, value, subtext, trend }: any) => (
         <div className="bg-white p-8 rounded-[32px] border border-[#D2D2D7] shadow-sm relative overflow-hidden group">
             <div className={`absolute top-0 right-0 w-2 h-full bg-[#0071E3]/10`}></div>
-            <p className="text-[#86868B] text-xs font-black uppercase tracking-widest mb-1">{label}</p>
+            <p className="text-[#1D1D1F] text-xs font-black uppercase tracking-widest mb-1">{label}</p>
             <h3 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">{value}</h3>
             <div className="flex items-center gap-2 mt-4">
                 {trend === "up" ? <TrendingUp size={16} className="text-green-500" /> : <TrendingDown size={16} className="text-red-500" />}
@@ -41,7 +41,7 @@ export default function ReportsPage() {
             <header className="flex justify-between items-end mb-16">
                 <div>
                     <h1 className="text-5xl font-black tracking-tight text-[#1D1D1F]">Insights</h1>
-                    <p className="text-[#86868B] mt-2 text-xl font-medium">Platform-wide operational analytics</p>
+                    <p className="text-[#1D1D1F] mt-2 text-xl font-medium">Platform-wide operational analytics</p>
                 </div>
                 <button className="flex items-center gap-3 px-6 py-4 bg-[#F5F5F7] hover:bg-[#E8E8ED] text-[#1D1D1F] rounded-2xl font-bold transition-all">
                     <Download size={20} />
@@ -68,7 +68,7 @@ export default function ReportsPage() {
                             <div key={report.patientCity} className="group cursor-default">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="font-bold text-lg">{report.patientCity}</span>
-                                    <span className="text-[#86868B] font-bold">{report._count._all} Orders</span>
+                                    <span className="text-[#1D1D1F] font-bold">{report._count._all} Orders</span>
                                 </div>
                                 <div className="w-full h-3 bg-[#F5F5F7] rounded-full overflow-hidden">
                                     <div
@@ -92,7 +92,7 @@ export default function ReportsPage() {
                                 <div key={kam.name} className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
                                     <span className="font-bold">{kam.name}</span>
                                     <div className="flex items-center gap-3">
-                                        <span className="text-xs text-[#86868B] font-bold uppercase">Converted</span>
+                                        <span className="text-xs text-[#D2D2D7] font-bold uppercase">Converted</span>
                                         <span className="text-[#0071E3] font-black text-xl">{kam._count.orders}</span>
                                     </div>
                                 </div>
@@ -106,11 +106,11 @@ export default function ReportsPage() {
                         </h2>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="p-6 bg-[#F5F5F7] rounded-3xl">
-                                <p className="text-xs font-bold text-[#86868B] uppercase mb-1">Total Network</p>
+                                <p className="text-xs font-bold text-[#1D1D1F] uppercase mb-1">Total Network</p>
                                 <p className="text-3xl font-black text-black">24</p>
                             </div>
                             <div className="p-6 bg-[#F5F5F7] rounded-3xl">
-                                <p className="text-xs font-bold text-[#86868B] uppercase mb-1">Avg Lead Time</p>
+                                <p className="text-xs font-bold text-[#1D1D1F] uppercase mb-1">Avg Lead Time</p>
                                 <p className="text-3xl font-black text-black">4.2h</p>
                             </div>
                         </div>

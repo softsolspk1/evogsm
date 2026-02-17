@@ -70,7 +70,7 @@ export default function AreasPage() {
             <header className="flex justify-between items-end mb-12">
                 <div>
                     <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Areas</h1>
-                    <p className="text-[#86868B] mt-1 text-lg font-medium">Assign areas under operational cities</p>
+                    <p className="text-[#1D1D1F] mt-1 text-lg font-medium">Assign areas under operational cities</p>
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-2xl border border-[#D2D2D7] shadow-sm">
@@ -100,19 +100,19 @@ export default function AreasPage() {
 
                         <form onSubmit={handleAddArea} className="space-y-6">
                             <div>
-                                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">City</label>
-                                <select
-                                    value={newArea.cityId}
-                                    onChange={(e) => setNewArea({ ...newArea, cityId: e.target.value })}
-                                    className="w-full px-5 py-4 bg-white border border-[#D2D2D7] rounded-2xl focus:ring-2 focus:ring-[#0071E3] focus:border-transparent outline-none transition-all font-bold text-[#1D1D1F] appearance-none"
-                                >
-                                    <option value="">Select City</option>
-                                    {cities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                                </select>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2 flex items-center gap-2">
+                                    <select
+                                        value={newArea.cityId}
+                                        onChange={(e) => setNewArea({ ...newArea, cityId: e.target.value })}
+                                        className="w-full px-5 py-4 bg-white border border-[#D2D2D7] rounded-2xl focus:ring-2 focus:ring-[#0071E3] focus:border-transparent outline-none transition-all font-bold text-[#1D1D1F] appearance-none"
+                                    >
+                                        <option value="">Select City</option>
+                                        {cities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                    </select>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Area Name</label>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Area Name</label>
                                 <input
                                     type="text"
                                     value={newArea.name}
@@ -164,7 +164,7 @@ export default function AreasPage() {
                     {!loading && filteredAreas.length === 0 && (
                         <div className="flex flex-col items-center justify-center py-20 bg-white/50 rounded-[32px] border border-dashed border-[#D2D2D7]">
                             <Grid2X2 className="text-[#D2D2D7] mb-4" size={48} />
-                            <p className="text-[#86868B] font-medium text-lg">No areas found.</p>
+                            <p className="text-[#1D1D1F] font-medium mb-8">Create new operational zone.</p>
                         </div>
                     )}
                 </div>

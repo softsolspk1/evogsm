@@ -45,7 +45,7 @@ export function Navigation() {
                         C
                     </div>
                     <div>
-                        <h2 className="font-bold text-xl tracking-tight">CGM Admin</h2>
+                        <h2 className="font-bold text-xl tracking-tight text-[#1D1D1F]">CGM Admin</h2>
                         <p className="text-xs text-[#86868B] font-medium uppercase tracking-widest">{userRole || "Guest"}</p>
                     </div>
                 </div>
@@ -77,7 +77,7 @@ export function Navigation() {
             <div className="absolute bottom-8 left-8 right-8">
                 <div className="p-4 bg-[#F5F5F7] rounded-3xl mb-4">
                     <p className="text-xs font-bold text-[#86868B] uppercase tracking-wider mb-1">Account</p>
-                    <p className="text-sm font-bold truncate">{session?.user.email || "Not signed in"}</p>
+                    <p className="text-sm font-bold text-[#1D1D1F] truncate">{session?.user.email || "Not signed in"}</p>
                 </div>
                 <button
                     onClick={() => signOut({ fetchOptions: { onSuccess: () => { window.location.href = "/"; } } })}

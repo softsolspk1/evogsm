@@ -22,6 +22,7 @@ interface User {
     name: string;
     email: string;
     role: string;
+    cityId?: string;
 }
 
 export default function OrdersPage() {
@@ -44,6 +45,8 @@ export default function OrdersPage() {
         patientPhone: "",
         patientCity: "",
         homeAddress: "",
+        doctorPrescribe: "",
+        deviceQuantity: "1",
         kamId: "",
         distributorId: "",
     });
@@ -137,6 +140,8 @@ export default function OrdersPage() {
                     patientPhone: "",
                     patientCity: "",
                     homeAddress: "",
+                    doctorPrescribe: "",
+                    deviceQuantity: "1",
                     kamId: "",
                     distributorId: "",
                 });
@@ -329,7 +334,7 @@ export default function OrdersPage() {
             {showCreateModal && (
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-xl flex items-center justify-center z-50 p-6">
                     <div className="bg-white p-10 rounded-[40px] w-full max-w-xl shadow-2xl border border-white/20 animate-in fade-in slide-in-from-bottom-8 duration-500">
-                        <h2 className="text-3xl font-bold mb-2">Initialize Order</h2>
+                        <h2 className="text-3xl font-bold mb-2 text-[#1D1D1F]">Initialize Order</h2>
                         <p className="text-[#86868B] font-medium mb-8">Deploy device for new clinical stability journey.</p>
 
                         <form onSubmit={handleCreateOrder} className="space-y-5">
@@ -342,7 +347,7 @@ export default function OrdersPage() {
                                     required
                                 />
                                 <input
-                                    placeholder="Phone Contact"
+                                    placeholder="Phone Number"
                                     className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
                                     value={newOrder.patientPhone}
                                     onChange={e => setNewOrder({ ...newOrder, patientPhone: e.target.value })}
@@ -353,11 +358,50 @@ export default function OrdersPage() {
                             <select
                                 className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
                                 value={newOrder.patientCity}
-                                onChange={e => setNewOrder({ ...newOrder, patientCity: e.target.value })}
+                                onChange={e => {
+                                    const selectedCity = e.target.value;
+                                    setNewOrder({ ...newOrder, patientCity: selectedCity });
+
+                                    // Auto-select KAM and Distributor based on city
+                                    if (selectedCity) {
+                                        const cityKAMs = kams.filter(k => k.cityId === cities.find(c => c.name === selectedCity)?.id);
+                                        const cityDistributors = distributors.filter(d => d.cityId === cities.find(c => c.name === selectedCity)?.id);
+
+                                        if (cityKAMs.length > 0) {
+                                            setNewOrder(prev => ({ ...prev, kamId: cityKAMs[0].id }));
+                                        }
+                                        if (cityDistributors.length > 0) {
+                                            setNewOrder(prev => ({ ...prev, distributorId: cityDistributors[0].id }));
+                                        }
+                                    }
+                                }}
                                 required
                             >
-                                <option value="">Select Target City</option>
+                                <option value="">City</option>
                                 {cities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                            </select>
+
+                            <input
+                                placeholder="Doctor Prescribe"
+                                className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
+                                value={newOrder.doctorPrescribe}
+                                onChange={e => setNewOrder({ ...newOrder, doctorPrescribe: e.target.value })}
+                                required
+                            />
+
+                            <select
+                                className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                                value={newOrder.deviceQuantity}
+                                onChange={e => setNewOrder({ ...newOrder, deviceQuantity: e.target.value })}
+                                required
+                            >
+                                <option value="">No. of Device Order</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
                             </select>
 
                             <textarea
@@ -374,11 +418,14 @@ export default function OrdersPage() {
                                     value={newOrder.distributorId}
                                     onChange={e => setNewOrder({ ...newOrder, distributorId: e.target.value })}
                                     required
+                                    disabled={!newOrder.patientCity}
                                 >
-                                    <option value="">Distributor</option>
-                                    {distributors.map(d => (
-                                        <option key={d.id} value={d.id}>{d.name}</option>
-                                    ))}
+                                    <option value="">Distributor (Auto)</option>
+                                    {distributors
+                                        .filter(d => !newOrder.patientCity || d.cityId === cities.find(c => c.name === newOrder.patientCity)?.id)
+                                        .map(d => (
+                                            <option key={d.id} value={d.id}>{d.name}</option>
+                                        ))}
                                 </select>
 
                                 {(userRole === "ADMIN" || userRole === "SUB_ADMIN") && (
@@ -387,11 +434,14 @@ export default function OrdersPage() {
                                         value={newOrder.kamId}
                                         onChange={e => setNewOrder({ ...newOrder, kamId: e.target.value })}
                                         required
+                                        disabled={!newOrder.patientCity}
                                     >
-                                        <option value="">KAM Lead</option>
-                                        {kams.map(k => (
-                                            <option key={k.id} value={k.id}>{k.name}</option>
-                                        ))}
+                                        <option value="">KAM Lead (Auto)</option>
+                                        {kams
+                                            .filter(k => !newOrder.patientCity || k.cityId === cities.find(c => c.name === newOrder.patientCity)?.id)
+                                            .map(k => (
+                                                <option key={k.id} value={k.id}>{k.name}</option>
+                                            ))}
                                     </select>
                                 )}
                             </div>
@@ -400,7 +450,7 @@ export default function OrdersPage() {
                                 <button
                                     type="submit"
                                     disabled={submitting}
-                                    className="w-full py-4 bg-[#0071E3] text-white font-bold text-lg rounded-[20px] hover:bg-[#0077ED] transition-all active:scale-[0.98] shadow-lg disabled:opacity-50"
+                                    className="w-full px-5 py-4 bg-[#0071E3] text-white font-bold text-lg rounded-[20px] hover:bg-[#0077ED] transition-all active:scale-[0.98] shadow-lg disabled:opacity-50"
                                 >
                                     {submitting ? "Processing..." : "Create Order"}
                                 </button>

@@ -83,14 +83,14 @@ export default function DistributorsPage() {
             <header className="flex justify-between items-end mb-12">
                 <div>
                     <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Distributors</h1>
-                    <p className="text-[#86868B] mt-1 text-lg font-medium">Onboard and manage logistics partners</p>
+                    <p className="text-[#1D1D1F] mt-1 text-lg font-medium">Onboard and manage logistics partners</p>
                 </div>
                 <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-2xl border border-[#D2D2D7] shadow-sm">
                     <Search size={18} className="text-[#86868B]" />
                     <input
                         type="text"
                         placeholder="Search distributors..."
-                        className="bg-transparent outline-none text-sm font-medium text-[#1D1D1F] placeholder:text-[#86868B] w-48"
+                        className="bg-transparent outline-none text-sm font-medium text-[#1D1D1F] placeholder:text-[#424245] w-48"
                     />
                 </div>
             </header>
@@ -108,7 +108,7 @@ export default function DistributorsPage() {
 
                         <form onSubmit={handleAddDistributor} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Full Name</label>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Full Name</label>
                                 <input
                                     type="text"
                                     value={formData.name}
@@ -119,7 +119,7 @@ export default function DistributorsPage() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Email</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Email</label>
                                     <input
                                         type="email"
                                         value={formData.email}
@@ -128,7 +128,7 @@ export default function DistributorsPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Employee Code</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Employee Code</label>
                                     <input
                                         type="text"
                                         value={formData.employeeCode}
@@ -139,7 +139,7 @@ export default function DistributorsPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Password</label>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Password</label>
                                 <input
                                     type="password"
                                     value={formData.password}
@@ -150,7 +150,7 @@ export default function DistributorsPage() {
 
                             <div className="p-4 bg-[#F5F5F7] rounded-2xl space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Assign City</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Assign City</label>
                                     <select
                                         value={formData.cityId}
                                         onChange={(e) => setFormData({ ...formData, cityId: e.target.value, areaId: "" })}
@@ -161,7 +161,7 @@ export default function DistributorsPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Assign Area (Optional)</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Assign Area (Optional)</label>
                                     <select
                                         value={formData.areaId}
                                         onChange={(e) => setFormData({ ...formData, areaId: e.target.value })}
@@ -193,7 +193,7 @@ export default function DistributorsPage() {
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20 bg-white/50 rounded-[32px] border border-dashed border-[#D2D2D7]">
                             <Loader2 className="animate-spin text-[#0071E3] mb-4" size={40} />
-                            <p className="text-[#86868B] font-medium">Loading distributors...</p>
+                            <p className="text-[#1D1D1F] font-medium mb-8">Loading distributors...</p>
                         </div>
                     ) : (
                         distributors.map((dist) => (

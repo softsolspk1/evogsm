@@ -15,6 +15,8 @@ export async function POST(request: NextRequest) {
             patientPhone,
             patientCity,
             homeAddress,
+            doctorPrescribe,
+            deviceQuantity,
             kamId,
             distributorId,
         } = body;
@@ -46,6 +48,8 @@ export async function POST(request: NextRequest) {
                 patientPhone,
                 patientCity,
                 homeAddress,
+                doctorPrescribe,
+                deviceQuantity: deviceQuantity ? parseInt(deviceQuantity) : 1,
                 kamId: finalKamId,
                 distributorId: distributorId, // Assigned distributor
                 subAdminId: finalSubAdminId,

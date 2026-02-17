@@ -89,14 +89,14 @@ export default function KAMsPage() {
             <header className="flex justify-between items-end mb-12">
                 <div>
                     <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Key Account Managers (KAM)</h1>
-                    <p className="text-[#86868B] mt-1 text-lg font-medium">Manage territorial sales leads</p>
+                    <p className="text-[#1D1D1F] mt-1 text-lg font-medium">Manage territorial sales leads</p>
                 </div>
                 <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-2xl border border-[#D2D2D7] shadow-sm">
                     <Search size={18} className="text-[#86868B]" />
                     <input
                         type="text"
                         placeholder="Search KAMs..."
-                        className="bg-transparent outline-none text-sm font-medium text-[#1D1D1F] placeholder:text-[#86868B] w-48"
+                        className="bg-transparent outline-none text-sm font-medium text-[#1D1D1F] placeholder:text-[#424245] w-48"
                     />
                 </div>
             </header>
@@ -125,7 +125,7 @@ export default function KAMsPage() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Email</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Email</label>
                                     <input
                                         type="email"
                                         value={formData.email}
@@ -134,7 +134,7 @@ export default function KAMsPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Employee Code</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Employee Code</label>
                                     <input
                                         type="text"
                                         value={formData.employeeCode}
@@ -156,7 +156,7 @@ export default function KAMsPage() {
 
                             <div className="p-4 bg-[#F5F5F7] rounded-2xl space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">City</label>
+                                    <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">City</label>
                                     <select
                                         value={formData.cityId}
                                         onChange={(e) => setFormData({ ...formData, cityId: e.target.value, areaId: "", distributorId: "" })}
@@ -168,7 +168,7 @@ export default function KAMsPage() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Distributor</label>
+                                        <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Distributor</label>
                                         <select
                                             value={formData.distributorId}
                                             onChange={(e) => setFormData({ ...formData, distributorId: e.target.value })}
@@ -180,7 +180,7 @@ export default function KAMsPage() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Area (Opt)</label>
+                                        <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Area (Opt)</label>
                                         <select
                                             value={formData.areaId}
                                             onChange={(e) => setFormData({ ...formData, areaId: e.target.value })}
@@ -225,7 +225,7 @@ export default function KAMsPage() {
                                         </div>
                                         <div>
                                             <h3 className="text-lg font-bold text-black">{kam.name}</h3>
-                                            <div className="flex items-center gap-2 text-[#86868B] text-xs font-semibold">
+                                            <div className="flex items-center gap-2 text-[#424245] text-xs font-semibold">
                                                 <Mail size={12} /> {kam.email}
                                             </div>
                                         </div>
@@ -237,20 +237,20 @@ export default function KAMsPage() {
 
                                 <div className="grid grid-cols-4 gap-4 border-t border-[#F5F5F7] pt-4">
                                     <div className="flex items-center gap-2">
-                                        <MapPin size={14} className="text-[#86868B]" />
+                                        <MapPin size={14} className="text-[#1D1D1F]" />
                                         <span className="text-sm font-bold">{kam.city?.name || "No City"}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Grid2X2 size={14} className="text-[#86868B]" />
+                                        <Grid2X2 size={14} className="text-[#1D1D1F]" />
                                         <span className="text-sm font-bold">{kam.area?.name || "All Areas"}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Truck size={14} className="text-[#86868B]" />
+                                        <Truck size={14} className="text-[#1D1D1F]" />
                                         <span className="text-sm font-bold truncate max-w-[80px]">{kam.primaryDistributor?.name || "Direct"}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <ShieldCheck size={14} className="text-[#86868B]" />
-                                        <span className="text-xs font-bold text-[#86868B]">{kam.employeeCode || "N/A"}</span>
+                                        <ShieldCheck size={14} className="text-[#1D1D1F]" />
+                                        <span className="text-xs font-bold text-[#1D1D1F]">{kam.employeeCode || "N/A"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -260,7 +260,7 @@ export default function KAMsPage() {
                     {!loading && kams.length === 0 && (
                         <div className="flex flex-col items-center justify-center py-20 bg-white/50 rounded-[32px] border border-dashed border-[#D2D2D7]">
                             <Briefcase className="text-[#D2D2D7] mb-4" size={48} />
-                            <p className="text-[#86868B] font-medium text-lg">No KAMs found.</p>
+                            <p className="text-[#1D1D1F] font-medium text-lg">No KAMs found.</p>
                         </div>
                     )}
                 </div>

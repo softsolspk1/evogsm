@@ -58,14 +58,14 @@ export default function CitiesPage() {
             <header className="flex justify-between items-end mb-12">
                 <div>
                     <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Cities</h1>
-                    <p className="text-[#86868B] mt-1 text-lg font-medium">Manage operational cities and regions</p>
+                    <p className="text-[#1D1D1F] mt-1 text-lg font-medium">Manage operational cities and regions</p>
                 </div>
                 <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-2xl border border-[#D2D2D7] shadow-sm">
                     <Search size={18} className="text-[#86868B]" />
                     <input
                         type="text"
                         placeholder="Search cities..."
-                        className="bg-transparent outline-none text-sm font-medium text-[#1D1D1F] placeholder:text-[#86868B] w-48"
+                        className="bg-transparent outline-none text-sm font-medium text-[#1D1D1F] placeholder:text-[#424245] w-48"
                     />
                 </div>
             </header>
@@ -83,13 +83,13 @@ export default function CitiesPage() {
 
                         <form onSubmit={handleAddCity} className="space-y-6">
                             <div>
-                                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">City Name</label>
+                                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">City Name</label>
                                 <input
                                     type="text"
                                     value={newCityName}
                                     onChange={(e) => setNewCityName(e.target.value)}
                                     placeholder="e.g. Karachi"
-                                    className="w-full px-5 py-4 bg-white border border-[#D2D2D7] rounded-2xl focus:ring-2 focus:ring-[#0071E3] focus:border-transparent outline-none transition-all font-medium text-[#1D1D1F] placeholder:text-[#86868B]"
+                                    className="w-full px-5 py-4 bg-white border border-[#D2D2D7] rounded-2xl focus:ring-2 focus:ring-[#0071E3] focus:border-transparent outline-none transition-all font-medium text-[#1D1D1F] placeholder:text-[#424245]"
                                 />
                                 {error && <p className="text-red-500 text-xs mt-2 font-medium">{error}</p>}
                             </div>

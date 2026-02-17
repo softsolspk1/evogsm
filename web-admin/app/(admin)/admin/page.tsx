@@ -28,6 +28,8 @@ export default function AdminPage() {
     role: "user",
   });
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const router = useRouter();
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function AdminPage() {
       <header className="flex justify-between items-end mb-12">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F]">Users</h1>
-          <p className="text-[#86868B] mt-1 text-lg font-medium">Manage accounts and platform access</p>
+          <p className="text-[#1D1D1F] mt-1 text-lg font-medium">Manage accounts and platform access</p>
         </div>
         <div className="flex gap-4">
           <button
@@ -118,96 +120,131 @@ export default function AdminPage() {
         </div>
       </header>
 
+      {/* Filters */}
+      <div className="mb-8 bg-white p-6 rounded-[24px] border border-[#D2D2D7] shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-bold text-[#1D1D1F] mb-2 uppercase tracking-wider">Filter by Role</label>
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="w-full px-4 py-3 bg-[#F5F5F7] rounded-[16px] text-[#1D1D1F] font-bold outline-none focus:ring-2 focus:ring-[#0071E3] appearance-none cursor-pointer"
+            >
+              <option value="all">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="KAM">KAM</option>
+              <option value="DISTRIBUTOR">Distributor</option>
+              <option value="user">User</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-bold text-[#1D1D1F] mb-2 uppercase tracking-wider">Filter by Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full px-4 py-3 bg-[#F5F5F7] rounded-[16px] text-[#1D1D1F] font-bold outline-none focus:ring-2 focus:ring-[#0071E3] appearance-none cursor-pointer"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="banned">Banned</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white rounded-[32px] overflow-hidden shadow-apple border border-[#D2D2D7]">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-[#D2D2D7] bg-[#FAFAFA]">
-                <th className="px-8 py-5 text-[13px] font-bold text-[#86868B] uppercase tracking-widest leading-none">
+                <th className="px-8 py-5 text-[13px] font-bold text-[#1D1D1F] uppercase tracking-widest leading-none">
                   User Details
                 </th>
-                <th className="px-8 py-5 text-[13px] font-bold text-[#86868B] uppercase tracking-widest leading-none">
+                <th className="px-8 py-5 text-[13px] font-bold text-[#1D1D1F] uppercase tracking-widest leading-none">
                   Access Role
                 </th>
-                <th className="px-8 py-5 text-[13px] font-bold text-[#86868B] uppercase tracking-widest leading-none">
+                <th className="px-8 py-5 text-[13px] font-bold text-[#1D1D1F] uppercase tracking-widest leading-none">
                   Account Status
                 </th>
-                <th className="px-8 py-5 text-[13px] font-bold text-[#86868B] uppercase tracking-widest leading-none text-right">
+                <th className="px-8 py-5 text-[13px] font-bold text-[#1D1D1F] uppercase tracking-widest leading-none text-right">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#F5F5F7]">
-              {users.map((user) => (
-                <tr key={user.id} className="group hover:bg-[#F5F5F7]/40 transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-[#0071E3]/10 text-[#0071E3] rounded-full flex items-center justify-center font-bold text-lg">
-                        {user.name?.[0]?.toUpperCase() || 'U'}
-                      </div>
-                      <div>
-                        {editingId === user.id ? (
-                          <input
-                            autoFocus
-                            defaultValue={user.name}
-                            onBlur={() => setEditingId(null)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter")
-                                handleUpdate(user.id, { name: e.currentTarget.value });
-                              if (e.key === "Escape") setEditingId(null);
-                            }}
-                            className="border-b-2 border-[#0071E3] py-1 text-lg font-bold outline-none w-full bg-transparent text-[#1D1D1F]"
-                          />
-                        ) : (
-                          <div onClick={() => setEditingId(user.id)} className="cursor-pointer">
-                            <div className="text-lg font-bold text-[#1D1D1F] group-hover:text-[#0071E3] transition-colors">{user.name}</div>
-                            <div className="text-sm text-[#86868B] font-medium flex items-center gap-1">
-                              <Mail size={12} /> {user.email}
+              {Array.isArray(users) && users
+                .filter(user => roleFilter === "all" || user.role === roleFilter)
+                .filter(user => statusFilter === "all" || (statusFilter === "active" ? !user.banned : user.banned))
+                .map((user) => (
+                  <tr key={user.id} className="group hover:bg-[#F5F5F7]/40 transition-colors">
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-[#0071E3]/10 text-[#0071E3] rounded-full flex items-center justify-center font-bold text-lg">
+                          {user.name?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <div>
+                          {editingId === user.id ? (
+                            <input
+                              autoFocus
+                              defaultValue={user.name}
+                              onBlur={() => setEditingId(null)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter")
+                                  handleUpdate(user.id, { name: e.currentTarget.value });
+                                if (e.key === "Escape") setEditingId(null);
+                              }}
+                              className="border-b-2 border-[#0071E3] py-1 text-lg font-bold outline-none w-full bg-transparent text-[#1D1D1F]"
+                            />
+                          ) : (
+                            <div onClick={() => setEditingId(user.id)} className="cursor-pointer">
+                              <div className="text-lg font-bold text-[#1D1D1F] group-hover:text-[#0071E3] transition-colors">{user.name}</div>
+                              <div className="text-sm text-[#86868B] font-medium flex items-center gap-1">
+                                <Mail size={12} /> {user.email}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2">
-                      <Shield size={16} className="text-[#86868B]" />
-                      <select
-                        value={user.role}
-                        onChange={(e) => handleUpdate(user.id, { role: e.target.value })}
-                        className="bg-transparent text-[15px] font-bold text-[#1D1D1F] outline-none cursor-pointer hover:text-[#0071E3] transition-colors appearance-none pr-8 py-1"
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-2">
+                        <Shield size={16} className="text-[#86868B]" />
+                        <select
+                          value={user.role}
+                          onChange={(e) => handleUpdate(user.id, { role: e.target.value })}
+                          className="bg-transparent text-[15px] font-bold text-[#1D1D1F] outline-none cursor-pointer hover:text-[#0071E3] transition-colors appearance-none pr-8 py-1"
+                        >
+                          <option value="user">User</option>
+                          <option value="admin">Admin</option>
+                          <option value="KAM">KAM</option>
+                          <option value="DISTRIBUTOR">Distributor</option>
+                        </select>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <button
+                        onClick={() => handleUpdate(user.id, { banned: !user.banned })}
+                        className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wider transition-all active:scale-95 ${!user.banned
+                          ? "bg-green-100 text-green-700 border border-green-200"
+                          : "bg-red-100 text-red-700 border border-red-200"
+                          }`}
                       >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                        <option value="KAM">KAM</option>
-                        <option value="DISTRIBUTOR">Distributor</option>
-                      </select>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <button
-                      onClick={() => handleUpdate(user.id, { banned: !user.banned })}
-                      className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wider transition-all active:scale-95 ${!user.banned
-                        ? "bg-green-100 text-green-700 border border-green-200"
-                        : "bg-red-100 text-red-700 border border-red-200"
-                        }`}
-                    >
-                      <div className={`w-2 h-2 rounded-full ${!user.banned ? "bg-green-500" : "bg-red-500"}`}></div>
-                      {!user.banned ? "Active" : "Banned"}
-                    </button>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <button
-                      disabled={actionLoading === user.id}
-                      onClick={() => handleDelete(user.id)}
-                      className="p-2 text-[#86868B] hover:text-red-600 hover:bg-red-50 rounded-xl transition-all disabled:opacity-50"
-                      title="Delete User"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                        <div className={`w-2 h-2 rounded-full ${!user.banned ? "bg-green-500" : "bg-red-500"}`}></div>
+                        {!user.banned ? "Active" : "Banned"}
+                      </button>
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <button
+                        disabled={actionLoading === user.id}
+                        onClick={() => handleDelete(user.id)}
+                        className="p-2 text-[#86868B] hover:text-red-600 hover:bg-red-50 rounded-xl transition-all disabled:opacity-50"
+                        title="Delete User"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -218,40 +255,40 @@ export default function AdminPage() {
           <div className="bg-white p-10 rounded-[40px] w-full max-w-lg shadow-2xl border border-white/20">
             <div className="mb-8">
               <h2 className="text-3xl font-bold mb-2">New User</h2>
-              <p className="text-[#86868B] font-medium">Create a new platform account.</p>
+              <p className="text-[#1D1D1F] font-medium">Create a new platform account.</p>
             </div>
 
             <div className="space-y-5">
               <div>
-                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Full Name</label>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Full Name</label>
                 <input
                   placeholder="e.g. John Doe"
                   value={newUser.name}
                   onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-                  className="w-full px-5 py-4 bg-[#F5F5F7] border-none rounded-[20px] text-base focus:ring-2 focus:ring-[#0071E3] outline-none transition-all font-bold text-[#1D1D1F] placeholder:text-[#86868B]"
+                  className="w-full px-5 py-4 bg-[#F5F5F7] border-none rounded-[20px] text-base focus:ring-2 focus:ring-[#0071E3] outline-none transition-all font-bold text-[#1D1D1F] placeholder:text-[#424245]"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Email Address</label>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Email Address</label>
                 <input
                   placeholder="john@example.com"
                   value={newUser.email}
                   onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-                  className="w-full px-5 py-4 bg-[#F5F5F7] border-none rounded-[20px] text-base focus:ring-2 focus:ring-[#0071E3] outline-none transition-all font-medium text-[#1D1D1F] placeholder:text-[#86868B]"
+                  className="w-full px-5 py-4 bg-[#F5F5F7] border-none rounded-[20px] text-base focus:ring-2 focus:ring-[#0071E3] outline-none transition-all font-medium text-[#1D1D1F] placeholder:text-[#424245]"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Password</label>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Password</label>
                 <input
                   placeholder="••••••••"
                   type="password"
                   value={newUser.password}
                   onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                  className="w-full px-5 py-4 bg-[#F5F5F7] border-none rounded-[20px] text-base focus:ring-2 focus:ring-[#0071E3] outline-none transition-all font-medium text-[#1D1D1F] placeholder:text-[#86868B]"
+                  className="w-full px-5 py-4 bg-[#F5F5F7] border-none rounded-[20px] text-base focus:ring-2 focus:ring-[#0071E3] outline-none transition-all font-medium text-[#1D1D1F] placeholder:text-[#424245]"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-[#86868B] uppercase tracking-wider mb-2">Role</label>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Role</label>
                 <div className="relative">
                   <select
                     value={newUser.role}

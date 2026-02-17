@@ -42,8 +42,8 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 relative bg-white flex-col items-center justify-center p-12 overflow-hidden border-r border-slate-200">
         <div className="relative z-10 w-full max-w-lg flex flex-col items-start mb-8">
           <Image src="/logo.png" alt="PharmEvo Logo" width={180} height={60} className="mb-8" />
-          <h2 className="text-5xl font-bold text-slate-800 mb-6">CGM Device Management System</h2>
-          <p className="text-xl text-slate-600 mb-10">Advanced tracking and analytics for PharmEvo CGM devices. Empowering KAMs and Distributors with real-time data.</p>
+          <h2 className="text-5xl font-bold text-[#1D1D1F] mb-6">CGM Device Management System</h2>
+          <p className="text-xl text-[#424245] mb-10">Advanced tracking and analytics for PharmEvo CGM devices. Empowering KAMs and Distributors with real-time data.</p>
         </div>
 
         <div className="relative z-10 rounded-3xl overflow-hidden shadow-xl max-w-xs w-full ring-1 ring-slate-900/5 mt-8">
@@ -63,35 +63,35 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-10 text-center">
-            <h1 className="text-3xl font-bold tracking-tight mb-2 text-slate-900">
+            <h1 className="text-3xl font-bold tracking-tight mb-2 text-[#1D1D1F]">
               Sign In
             </h1>
-            <p className="text-slate-500">
+            <p className="text-[#424245]">
               Enter your credentials to access the portal.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium px-1 text-slate-700">Email Address</label>
+              <label className="text-sm font-medium px-1 text-[#1D1D1F]">Email Address</label>
               <Input
                 type="email"
                 placeholder="email@pharmevo.biz"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="apple-input bg-white border-slate-200 focus:border-sky-500 text-slate-900"
+                className="apple-input bg-white border-slate-200 focus:border-sky-500 text-[#1D1D1F]"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium px-1 text-slate-700">Password</label>
+              <label className="text-sm font-medium px-1 text-[#1D1D1F]">Password</label>
               <Input
                 type="password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="apple-input bg-white border-slate-200 focus:border-sky-500 text-slate-900"
+                className="apple-input bg-white border-slate-200 focus:border-sky-500 text-[#1D1D1F]"
               />
             </div>
 

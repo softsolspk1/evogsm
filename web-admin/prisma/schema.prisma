@@ -191,6 +191,8 @@ model Order {
   patientPhone      String
   patientCity       String
   homeAddress       String
+  doctorPrescribe   String?
+  deviceQuantity    Int         @default(1)
   status            OrderStatus @default(PENDING)
   
   // Relations
