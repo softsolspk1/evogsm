@@ -23,6 +23,7 @@ export function Navigation() {
     const navItems = [
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "Orders", href: "/orders", icon: ShoppingCart },
+        { name: "Patients", href: "/patients", icon: Users },
         { name: "City", href: "/cities", icon: MapPin },
         { name: "Area", href: "/areas", icon: Grid2X2 },
         { name: "Distributor", href: "/distributors", icon: Truck },
