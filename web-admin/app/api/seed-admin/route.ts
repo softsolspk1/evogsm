@@ -7,7 +7,7 @@ export async function GET() {
         const passwordHash = await bcrypt.hash("password123", 10);
 
         // Debug info BEFORE query
-        console.log("Seeding attempt starting Version 4000...");
+        console.log("Seeding attempt starting Version 5000...");
 
         const admin = await prisma.user.upsert({
             where: { email: "admin1@example.com" },
@@ -53,8 +53,8 @@ export async function GET() {
             success: true,
             message: "Users seeded successfully",
             debug: {
-                version: "4000-DIRECT-STABLE",
-                db_url_check: process.env.DATABASE_URL ? "SET" : "MISSING",
+                version: "5000-ADAPTER-INJECT",
+                db_url_at_execution: process.env.DATABASE_URL ? "DETECTED" : "MISSING",
                 timestamp: new Date().toISOString()
             },
             users: [
@@ -70,8 +70,8 @@ export async function GET() {
             success: false,
             error: error.message,
             debug: {
-                version: "4000-DIRECT-STABLE",
-                db_url_check: process.env.DATABASE_URL ? "SET" : "MISSING",
+                version: "5000-ADAPTER-INJECT",
+                db_url_at_execution: process.env.DATABASE_URL ? "DETECTED" : "MISSING",
                 error_name: error.name
             }
         }, {
