@@ -6,6 +6,9 @@ export async function GET() {
     try {
         const passwordHash = await bcrypt.hash("password123", 10);
 
+        // Debug info BEFORE query
+        console.log("Seeding attempt starting...");
+
         const admin = await prisma.user.upsert({
             where: { email: "admin1@example.com" },
             update: { role: "ADMIN", isVerified: true, emailVerified: true },
@@ -50,8 +53,8 @@ export async function GET() {
             success: true,
             message: "Users seeded successfully",
             debug: {
-                version: "1000-FINAL-FORCE",
-                hasPermanentUrl: true,
+                version: "2000-DIRECT-TEST",
+                env_db_url_exists: !!process.env.DATABASE_URL,
                 timestamp: new Date().toISOString()
             },
             users: [
@@ -62,13 +65,15 @@ export async function GET() {
             headers: { 'Cache-Control': 'no-store, max-age=0' }
         });
     } catch (error: any) {
+        console.error("Seed error:", error);
         return NextResponse.json({
             success: false,
             error: error.message,
+            stack: error.stack,
             debug: {
-                version: "1000-FINAL-FORCE",
-                hasPermanentUrl: true,
-                errorDetail: "Failed at Prisma query"
+                version: "2000-DIRECT-TEST",
+                error_name: error.name,
+                error_code: error.code
             }
         }, {
             status: 500,
