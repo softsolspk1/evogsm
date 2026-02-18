@@ -6,9 +6,7 @@ export async function GET() {
     try {
         const passwordHash = await bcrypt.hash("password123", 10);
 
-        // Debug info BEFORE query
-        console.log("Seeding attempt starting Version 5000...");
-
+        // Explicitly await the connection and first query
         const admin = await prisma.user.upsert({
             where: { email: "admin1@example.com" },
             update: { role: "ADMIN", isVerified: true, emailVerified: true },
@@ -53,8 +51,8 @@ export async function GET() {
             success: true,
             message: "Users seeded successfully",
             debug: {
-                version: "5000-ADAPTER-INJECT",
-                db_url_at_execution: process.env.DATABASE_URL ? "DETECTED" : "MISSING",
+                version: "6000-HTTP-STABLE",
+                db_url_status: process.env.DATABASE_URL ? "CONFIGURED" : "MISSING",
                 timestamp: new Date().toISOString()
             },
             users: [
@@ -65,18 +63,20 @@ export async function GET() {
             headers: { 'Cache-Control': 'no-store, max-age=0' }
         });
     } catch (error: any) {
-        console.error("Seed error:", error);
         return NextResponse.json({
             success: false,
-            error: error.message,
+            error: error.message || "Unknown error occurred",
             debug: {
-                version: "5000-ADAPTER-INJECT",
-                db_url_at_execution: process.env.DATABASE_URL ? "DETECTED" : "MISSING",
-                error_name: error.name
+                version: "6000-HTTP-STABLE",
+                db_url_status: process.env.DATABASE_URL ? "CONFIGURED" : "MISSING",
+                error_name: error.name || "Error"
             }
         }, {
             status: 500,
-            headers: { 'Cache-Control': 'no-store, max-age=0' }
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, max-age=0'
+            }
         });
     }
 }
