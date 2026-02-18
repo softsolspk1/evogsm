@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   ShoppingBag,
   Users,
@@ -12,9 +11,12 @@ import {
   Package,
   Loader2,
   PlusCircle,
-  UserPlus
+  UserPlus,
+  Truck,
+  Briefcase
 } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { Input } from "@/components/ui/input";
 
 // StatCard Component
 function StatCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) {
@@ -37,6 +39,35 @@ export default function DashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Modal states
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+
+  // Order form state
+  const [newOrder, setNewOrder] = useState({
+    patientName: "",
+    patientPhone: "",
+    patientCity: "",
+    homeAddress: "",
+    doctorPrescribe: "",
+    deviceQuantity: "1",
+    kamId: "",
+    distributorId: "",
+  });
+  const [kams, setKams] = useState<any[]>([]);
+  const [distributors, setDistributors] = useState<any[]>([]);
+  const [cities, setCities] = useState<any[]>([]);
+  const [submittingOrder, setSubmittingOrder] = useState(false);
+
+  // User form state
+  const [userFormData, setUserFormData] = useState({
+    email: "",
+    name: "",
+    role: "KAM",
+    employeeCode: "",
+  });
+  const [submittingUser, setSubmittingUser] = useState(false);
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -61,9 +92,131 @@ export default function DashboardPage() {
     }
   }, [session]);
 
+  // Fetch data for order form
+  useEffect(() => {
+    if (showOrderModal) {
+      fetchKams();
+      fetchDistributors();
+      fetchCities();
+    }
+  }, [showOrderModal]);
+
+  const fetchKams = async () => {
+    try {
+      const res = await fetch("/api/admin/users?role=KAM");
+      if (res.ok) {
+        const data = await res.json();
+        setKams(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch KAMs:", error);
+    }
+  };
+
+  const fetchDistributors = async () => {
+    try {
+      const res = await fetch("/api/admin/users?role=DISTRIBUTOR");
+      if (res.ok) {
+        const data = await res.json();
+        setDistributors(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch distributors:", error);
+    }
+  };
+
+  const fetchCities = async () => {
+    try {
+      const res = await fetch("/api/cities");
+      if (res.ok) {
+        const data = await res.json();
+        setCities(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch cities:", err);
+    }
+  };
+
+  const handleCreateOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittingOrder(true);
+
+    const userRole = (session?.user as any).role;
+    if ((userRole === "admin" || userRole === "sub_admin") && !newOrder.kamId) {
+      alert("Please select a KAM");
+      setSubmittingOrder(false);
+      return;
+    }
+    if (!newOrder.distributorId) {
+      alert("Please select a Distributor");
+      setSubmittingOrder(false);
+      return;
+    }
+
+    try {
+      const payload = { ...newOrder };
+      if (userRole === "KAM") delete (payload as any).kamId;
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        setShowOrderModal(false);
+        setNewOrder({
+          patientName: "",
+          patientPhone: "",
+          patientCity: "",
+          homeAddress: "",
+          doctorPrescribe: "",
+          deviceQuantity: "1",
+          kamId: "",
+          distributorId: "",
+        });
+        alert("Order created successfully!");
+      } else {
+        const err = await res.json();
+        alert(err.error || "Failed to create order");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Error creating order");
+    } finally {
+      setSubmittingOrder(false);
+    }
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittingUser(true);
+    try {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userFormData),
+      });
+      if (res.ok) {
+        setShowUserModal(false);
+        setUserFormData({ email: "", name: "", role: "KAM", employeeCode: "" });
+        alert("User created successfully!");
+      } else {
+        alert("Failed to create user");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error occurred");
+    } finally {
+      setSubmittingUser(false);
+    }
+  };
+
   if (isPending || loading) {
     return <div className="flex h-[80vh] items-center justify-center"><Loader2 className="animate-spin text-[#0071E3]" size={40} /></div>;
   }
+
+  const userRole = (session?.user as any)?.role?.toUpperCase();
 
   return (
     <div className="p-10 max-w-7xl mx-auto">
@@ -90,14 +243,24 @@ export default function DashboardPage() {
         <div className="bg-white p-10 rounded-[40px] border border-[#D2D2D7] shadow-sm">
           <h2 className="text-3xl font-bold mb-8 text-[#1D1D1F]">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-6">
-            <Link href="/orders/new" className="flex flex-col items-center justify-center p-8 bg-[#F5F5F7] rounded-[32px] hover:bg-[#E8E8ED] transition-all group">
-              <PlusCircle size={40} className="text-[#0071E3] mb-4 group-hover:scale-110 transition-transform" />
-              <span className="font-semibold text-lg text-[#1D1D1F]">New Order</span>
-            </Link>
-            <Link href="/users" className="flex flex-col items-center justify-center p-8 bg-[#F5F5F7] rounded-[32px] hover:bg-[#E8E8ED] transition-all group">
-              <UserPlus size={40} className="text-[#0071E3] mb-4 group-hover:scale-110 transition-transform" />
-              <span className="font-semibold text-lg text-[#1D1D1F]">Add User</span>
-            </Link>
+            {(userRole === "ADMIN" || userRole === "SUB_ADMIN" || userRole === "KAM") && (
+              <button
+                onClick={() => setShowOrderModal(true)}
+                className="flex flex-col items-center justify-center p-8 bg-[#F5F5F7] rounded-[32px] hover:bg-[#E8E8ED] transition-all group"
+              >
+                <PlusCircle size={40} className="text-[#0071E3] mb-4 group-hover:scale-110 transition-transform" />
+                <span className="font-semibold text-lg text-[#1D1D1F]">New Order</span>
+              </button>
+            )}
+            {userRole === "ADMIN" && (
+              <button
+                onClick={() => setShowUserModal(true)}
+                className="flex flex-col items-center justify-center p-8 bg-[#F5F5F7] rounded-[32px] hover:bg-[#E8E8ED] transition-all group"
+              >
+                <UserPlus size={40} className="text-[#0071E3] mb-4 group-hover:scale-110 transition-transform" />
+                <span className="font-semibold text-lg text-[#1D1D1F]">Add User</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -158,6 +321,235 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* Order Creation Modal */}
+      {showOrderModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-xl flex items-center justify-center z-50 p-6">
+          <div className="bg-white p-10 rounded-[40px] w-full max-w-xl shadow-2xl border border-white/20 animate-in fade-in slide-in-from-bottom-8 duration-500 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-3xl font-bold mb-2 text-[#1D1D1F]">Initialize Order</h2>
+            <p className="text-[#86868B] font-medium mb-8">Deploy device for new clinical stability journey.</p>
+
+            <form onSubmit={handleCreateOrder} className="space-y-5">
+              <div className="grid grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Patient Name</label>
+                  <input
+                    placeholder="Patient Name"
+                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
+                    value={newOrder.patientName}
+                    onChange={e => setNewOrder({ ...newOrder, patientName: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Phone Number</label>
+                  <input
+                    placeholder="Phone Number"
+                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
+                    value={newOrder.patientPhone}
+                    onChange={e => setNewOrder({ ...newOrder, patientPhone: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">City</label>
+                <select
+                  className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                  value={newOrder.patientCity}
+                  onChange={e => {
+                    const selectedCity = e.target.value;
+                    setNewOrder({ ...newOrder, patientCity: selectedCity });
+
+                    if (selectedCity) {
+                      const cityKAMs = kams.filter(k => k.cityId === cities.find(c => c.name === selectedCity)?.id);
+                      const cityDistributors = distributors.filter(d => d.cityId === cities.find(c => c.name === selectedCity)?.id);
+
+                      if (cityKAMs.length > 0) {
+                        setNewOrder(prev => ({ ...prev, kamId: cityKAMs[0].id }));
+                      }
+                      if (cityDistributors.length > 0) {
+                        setNewOrder(prev => ({ ...prev, distributorId: cityDistributors[0].id }));
+                      }
+                    }
+                  }}
+                  required
+                >
+                  <option value="">City</option>
+                  {cities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Doctor Prescribe</label>
+                <input
+                  placeholder="Doctor Prescribe"
+                  className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium"
+                  value={newOrder.doctorPrescribe}
+                  onChange={e => setNewOrder({ ...newOrder, doctorPrescribe: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Device Quantity</label>
+                <select
+                  className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                  value={newOrder.deviceQuantity}
+                  onChange={e => setNewOrder({ ...newOrder, deviceQuantity: e.target.value })}
+                  required
+                >
+                  <option value="">No. of Device Order</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-2">Home Delivery Address</label>
+                <textarea
+                  placeholder="Home Delivery Address"
+                  className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] placeholder:text-[#86868B] outline-none focus:ring-2 focus:ring-[#0071E3] font-medium min-h-[100px]"
+                  value={newOrder.homeAddress}
+                  onChange={e => setNewOrder({ ...newOrder, homeAddress: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-5">
+                <select
+                  className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                  value={newOrder.distributorId}
+                  onChange={e => setNewOrder({ ...newOrder, distributorId: e.target.value })}
+                  required
+                  disabled={!newOrder.patientCity}
+                >
+                  <option value="">Distributor (Auto)</option>
+                  {distributors
+                    .filter(d => !newOrder.patientCity || d.cityId === cities.find(c => c.name === newOrder.patientCity)?.id)
+                    .map(d => (
+                      <option key={d.id} value={d.id}>{d.name}</option>
+                    ))}
+                </select>
+
+                {(userRole === "ADMIN" || userRole === "SUB_ADMIN") && (
+                  <select
+                    className="w-full px-5 py-4 bg-[#F5F5F7] rounded-[20px] text-[#1D1D1F] outline-none focus:ring-2 focus:ring-[#0071E3] font-bold appearance-none"
+                    value={newOrder.kamId}
+                    onChange={e => setNewOrder({ ...newOrder, kamId: e.target.value })}
+                    required
+                    disabled={!newOrder.patientCity}
+                  >
+                    <option value="">KAM Lead (Auto)</option>
+                    {kams
+                      .filter(k => !newOrder.patientCity || k.cityId === cities.find(c => c.name === newOrder.patientCity)?.id)
+                      .map(k => (
+                        <option key={k.id} value={k.id}>{k.name}</option>
+                      ))}
+                  </select>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-3 mt-8">
+                <button
+                  type="submit"
+                  disabled={submittingOrder}
+                  className="w-full px-5 py-4 bg-[#0071E3] text-white font-bold text-lg rounded-[20px] hover:bg-[#0077ED] transition-all active:scale-[0.98] shadow-lg disabled:opacity-50"
+                >
+                  {submittingOrder ? "Processing..." : "Create Order"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowOrderModal(false)}
+                  className="w-full py-4 text-[#0071E3] font-bold text-lg hover:underline"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* User Creation Modal */}
+      {showUserModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-xl flex items-center justify-center z-50 p-6">
+          <div className="bg-white p-10 rounded-[40px] w-full max-w-2xl shadow-2xl border border-white/20 animate-in fade-in slide-in-from-bottom-8 duration-500">
+            <h2 className="text-3xl font-bold mb-2 text-[#1D1D1F]">New User</h2>
+            <p className="text-[#86868B] font-medium mb-8">Create a new user account</p>
+
+            <form onSubmit={handleCreateUser} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium pr-2">Full Name</label>
+                  <Input
+                    placeholder="e.g. Ali Khan"
+                    value={userFormData.name}
+                    onChange={(e) => setUserFormData({ ...userFormData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium pr-2">Role</label>
+                  <select
+                    className="w-full px-4 py-3 bg-[#f5f5f7] rounded-xl outline-none focus:ring-2 focus:ring-pharmevo-blue transition-all"
+                    value={userFormData.role}
+                    onChange={(e) => setUserFormData({ ...userFormData, role: e.target.value })}
+                  >
+                    <option value="KAM">KAM (Key Account Manager)</option>
+                    <option value="DISTRIBUTOR">Distributor</option>
+                    <option value="SUB_ADMIN">Sub Admin (Marketing/Coordination)</option>
+                    <option value="ADMIN">Super Admin</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium pr-2">Email Address</label>
+                <Input
+                  type="email"
+                  placeholder="email@pharmevo.biz"
+                  value={userFormData.email}
+                  onChange={(e) => setUserFormData({ ...userFormData, email: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium pr-2">Employee / Distributor Code</label>
+                <Input
+                  placeholder="e.g. KAM-102 or DIST-55"
+                  value={userFormData.employeeCode}
+                  onChange={(e) => setUserFormData({ ...userFormData, employeeCode: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-3 mt-8">
+                <button
+                  type="submit"
+                  disabled={submittingUser}
+                  className="w-full px-5 py-4 bg-[#0071E3] text-white font-bold text-lg rounded-[20px] hover:bg-[#0077ED] transition-all active:scale-[0.98] shadow-lg disabled:opacity-50"
+                >
+                  {submittingUser ? "Creating..." : "Provision Access"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowUserModal(false)}
+                  className="w-full py-4 text-[#0071E3] font-bold text-lg hover:underline"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -59,12 +59,12 @@ export default function ReportsPage() {
                 {/* City Breakdown */}
                 <div className="bg-white p-10 rounded-[40px] border border-[#D2D2D7] shadow-sm">
                     <div className="flex items-center justify-between mb-10">
-                        <h2 className="text-2xl font-bold flex items-center gap-3">
+                        <h2 className="text-2xl font-bold flex items-center gap-3 text-[#1D1D1F]">
                             <MapPin className="text-[#0071E3]" /> City Wise Distribution
                         </h2>
                     </div>
                     <div className="space-y-6">
-                        {stats?.cityReports?.map((report: any) => (
+                        {(stats?.cityReports || []).map((report: any) => (
                             <div key={report.patientCity} className="group cursor-default">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="font-bold text-lg">{report.patientCity}</span>
@@ -88,7 +88,7 @@ export default function ReportsPage() {
                             <Briefcase className="text-[#0071E3]" /> Top KAM Performance
                         </h2>
                         <div className="space-y-4">
-                            {stats?.kamPerformance?.map((kam: any) => (
+                            {(stats?.kamPerformance || []).slice().sort((a: any, b: any) => b._count.orders - a._count.orders).map((kam: any) => (
                                 <div key={kam.id} className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
                                     <span className="font-bold">{kam.name}</span>
                                     <div className="flex items-center gap-3">
