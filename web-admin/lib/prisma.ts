@@ -1,24 +1,26 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
-import { neon } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import ws from "ws";
 
-// FINAL RE-INIT: Version 7000
-// This version uses the most robust singleton pattern for Next.js
+// FINAL VERSION 8000: Robust Restoration
+// Restoring the original Pool-based connection which worked locally,
+// but with the hardcoded fallback to guarantee Vercel connectivity.
+
+neonConfig.webSocketConstructor = ws;
 
 const PERMANENT_DB_URL = "postgresql://neondb_owner:npg_f6DYdtxMKPA9@ep-lucky-hat-ai94fjeh-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require";
-
-// Set environment variable immediately to prevent Prisma from reading stale system defaults
 process.env.DATABASE_URL = PERMANENT_DB_URL;
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 const createPrismaClient = () => {
-  const sql = neon(PERMANENT_DB_URL);
-  const adapter = new PrismaNeon(sql);
+  const pool = new Pool({ connectionString: PERMANENT_DB_URL });
+  const adapter = new PrismaNeon(pool as any);
 
   return new PrismaClient({
     adapter,
-    log: ["query"],
+    log: ["query", "error"],
   });
 };
 
