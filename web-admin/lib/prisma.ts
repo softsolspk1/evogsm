@@ -3,8 +3,8 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import ws from "ws";
 
-// VERSION 10000: DEFINITIVE PM RECOVERY
-// Fixes the Prisma 7 validation error and restores local stability.
+// VERSION 11000: DEFINITIVE PM STABILIZER
+// Removes invalid constructor properties and restores local singleton.
 
 neonConfig.webSocketConstructor = ws;
 
@@ -21,12 +21,6 @@ const createPrismaClient = () => {
 
   return new PrismaClient({
     adapter,
-    // Corrected datasources structure for Prisma 7 compatibility if override is needed
-    datasources: {
-      db: {
-        url: PERMANENT_DB_URL,
-      },
-    },
     log: ["query", "error"],
   });
 };
