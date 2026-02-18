@@ -49,12 +49,26 @@ export async function GET() {
         return NextResponse.json({
             success: true,
             message: "Users seeded successfully",
+            debug: {
+                version: "1.0.1-hotfix-verified",
+                hasDbUrl: !!process.env.DATABASE_URL,
+                dbUrlType: typeof process.env.DATABASE_URL,
+                timestamp: "2026-02-18T11:45:00Z"
+            },
             users: [
                 { email: admin.email, role: admin.role, password: "password123" },
                 { email: subAdmin.email, role: subAdmin.role, password: "password123" },
             ],
         });
     } catch (error: any) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        return NextResponse.json({
+            success: false,
+            error: error.message,
+            debug: {
+                version: "1.0.1-hotfix-verified",
+                hasDbUrl: !!process.env.DATABASE_URL,
+                dbUrlType: typeof process.env.DATABASE_URL
+            }
+        }, { status: 500 });
     }
 }
