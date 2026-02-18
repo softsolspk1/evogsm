@@ -54,7 +54,7 @@ export function Navigation() {
                         C
                     </div>
                     <div>
-                        <h2 className="font-bold text-xl tracking-tight text-[#1D1D1F]">CGM Admin</h2>
+                        <h2 className="font-bold text-lg leading-tight tracking-tight text-[#1D1D1F]">CGM Device<br />Management System</h2>
                         <p className="text-xs text-[#86868B] font-medium uppercase tracking-widest">{userRole || "Guest"}</p>
                     </div>
                 </div>

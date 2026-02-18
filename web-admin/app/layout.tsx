@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Auth Premium | Experience Elegance",
-  description: "Advanced authentication with Apple-inspired design.",
+  title: "CGM Device Management System",
+  description: "Comprehensive management system for CGM devices, orders, and users.",
 };
 
 export default function RootLayout({
