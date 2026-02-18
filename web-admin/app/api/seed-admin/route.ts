@@ -1,75 +1,76 @@
-import { prisma } from "@/lib/prisma";
+import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+    // Version 7000: Manual HTTP Seeding (Bypasses Prisma entirely for this task)
+    const PERMANENT_DB_URL = "postgresql://neondb_owner:npg_f6DYdtxMKPA9@ep-lucky-hat-ai94fjeh-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require";
+    const sql = neon(PERMANENT_DB_URL);
+
     try {
         const passwordHash = await bcrypt.hash("password123", 10);
+        const now = new Date().toISOString();
 
-        // Explicitly await the connection and first query
-        const admin = await prisma.user.upsert({
-            where: { email: "admin1@example.com" },
-            update: { role: "ADMIN", isVerified: true, emailVerified: true },
-            create: {
-                email: "admin1@example.com",
-                name: "Admin User",
-                role: "ADMIN",
-                isVerified: true,
-                emailVerified: true,
-                account: {
-                    create: {
-                        providerId: "credential",
-                        accountId: "admin1@example.com",
-                        password: passwordHash,
-                        updatedAt: new Date(),
-                    },
-                },
-            },
-        });
+        console.log("Starting Manual HTTP Seed...");
 
-        const subAdmin = await prisma.user.upsert({
-            where: { email: "subadmin@test.com" },
-            update: { role: "SUB_ADMIN", isVerified: true, emailVerified: true },
-            create: {
-                email: "subadmin@test.com",
-                name: "Sub Admin Test",
-                role: "SUB_ADMIN",
-                isVerified: true,
-                emailVerified: true,
-                account: {
-                    create: {
-                        providerId: "credential",
-                        accountId: "subadmin@test.com",
-                        password: passwordHash,
-                        updatedAt: new Date(),
-                    },
-                },
-            },
-        });
+        // 1. Ensure Admin User exists
+        await sql`
+            INSERT INTO public."User" (id, email, name, role, "isVerified", "emailVerified", "updatedAt")
+            VALUES (gen_random_uuid(), 'admin1@example.com', 'Admin User', 'ADMIN', true, true, ${now})
+            ON CONFLICT (email) DO UPDATE SET 
+                role = 'ADMIN', 
+                "isVerified" = true, 
+                "updatedAt" = ${now};
+        `;
+
+        // 2. Ensure Admin Account exists
+        await sql`
+            INSERT INTO public."Account" (id, "userId", "providerId", "accountId", password, "updatedAt")
+            SELECT gen_random_uuid(), id, 'credential', 'admin1@example.com', ${passwordHash}, ${now}
+            FROM public."User" WHERE email = 'admin1@example.com'
+            ON CONFLICT ("userId", "providerId") DO UPDATE SET 
+                password = ${passwordHash}, 
+                "updatedAt" = ${now};
+        `;
+
+        // 3. Ensure Sub Admin User exists
+        await sql`
+            INSERT INTO public."User" (id, email, name, role, "isVerified", "emailVerified", "updatedAt")
+            VALUES (gen_random_uuid(), 'subadmin@test.com', 'Sub Admin Test', 'SUB_ADMIN', true, true, ${now})
+            ON CONFLICT (email) DO UPDATE SET 
+                role = 'SUB_ADMIN', 
+                "isVerified" = true, 
+                "updatedAt" = ${now};
+        `;
+
+        // 4. Ensure Sub Admin Account exists
+        await sql`
+            INSERT INTO public."Account" (id, "userId", "providerId", "accountId", password, "updatedAt")
+            SELECT gen_random_uuid(), id, 'credential', 'subadmin@test.com', ${passwordHash}, ${now}
+            FROM public."User" WHERE email = 'subadmin@test.com'
+            ON CONFLICT ("userId", "providerId") DO UPDATE SET 
+                password = ${passwordHash}, 
+                "updatedAt" = ${now};
+        `;
 
         return NextResponse.json({
             success: true,
-            message: "Users seeded successfully",
+            message: "Users seeded/updated successfully via direct HTTP",
             debug: {
-                version: "6000-HTTP-STABLE",
-                db_url_status: process.env.DATABASE_URL ? "CONFIGURED" : "MISSING",
-                timestamp: new Date().toISOString()
-            },
-            users: [
-                { email: admin.email, role: admin.role, password: "password123" },
-                { email: subAdmin.email, role: subAdmin.role, password: "password123" },
-            ],
+                version: "7000-MANUAL-HTTP",
+                timestamp: now
+            }
         }, {
             headers: { 'Cache-Control': 'no-store, max-age=0' }
         });
     } catch (error: any) {
+        console.error("Manual Seed error:", error);
         return NextResponse.json({
             success: false,
-            error: error.message || "Unknown error occurred",
+            error: error.message,
             debug: {
-                version: "6000-HTTP-STABLE",
-                db_url_status: process.env.DATABASE_URL ? "CONFIGURED" : "MISSING",
-                error_name: error.name || "Error"
+                version: "7000-MANUAL-HTTP",
+                hint: "Ensure the table names and schemas match exactly."
             }
         }, {
             status: 500,
