@@ -16,23 +16,28 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await authClient.signIn.email({
-      email,
-      password,
-    });
-    setLoading(false);
-    if (error) {
-      alert(error.message);
-    } else {
-      const { data: session } = await authClient.getSession();
-      // Redirect based on role
-      if (session?.user.role === "ADMIN") {
-        router.push("/dashboard");
-      } else if (session?.user.role === "SUB_ADMIN") {
-        router.push("/orders/new");
+    try {
+      const { error } = await authClient.signIn.email({
+        email,
+        password,
+      });
+      setLoading(false);
+      if (error) {
+        alert(error.message);
       } else {
-        router.push("/dashboard");
+        const { data: session } = await authClient.getSession();
+        // Redirect based on role
+        if (session?.user.role === "ADMIN") {
+          router.push("/dashboard");
+        } else if (session?.user.role === "SUB_ADMIN") {
+          router.push("/orders/new");
+        } else {
+          router.push("/dashboard");
+        }
       }
+    } catch (err: any) {
+      setLoading(false);
+      alert("Login failed (Network or System Error): " + (err.message || "Unknown error"));
     }
   };
 
@@ -80,7 +85,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="apple-input bg-white border-slate-200 focus:border-sky-500 text-[#1D1D1F]"
+                className="apple-input bg-white dark:bg-white text-black dark:text-black border-slate-200 focus:border-sky-500 placeholder:text-gray-400"
               />
             </div>
             <div className="space-y-2">
@@ -91,7 +96,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="apple-input bg-white border-slate-200 focus:border-sky-500 text-[#1D1D1F]"
+                className="apple-input bg-white dark:bg-white text-black dark:text-black border-slate-200 focus:border-sky-500 placeholder:text-gray-400"
               />
             </div>
 
@@ -114,4 +119,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
