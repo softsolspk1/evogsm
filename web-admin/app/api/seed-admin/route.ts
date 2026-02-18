@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    // Version 8000: Corrected Manual HTTP Seeding (Correct Schema: neon_auth)
+    // VERSION 9000: RAW HTTP BACKDOOR
+    // This bypasses Prisma entirely to guarantee user creation on Vercel.
     const PERMANENT_DB_URL = "postgresql://neondb_owner:npg_f6DYdtxMKPA9@ep-lucky-hat-ai94fjeh-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require";
     const sql = neon(PERMANENT_DB_URL);
 
@@ -11,18 +12,19 @@ export async function GET() {
         const passwordHash = await bcrypt.hash("password123", 10);
         const now = new Date().toISOString();
 
-        console.log("Starting Manual HTTP Seed Version 8000...");
+        console.log("Starting Version 9000 Definitive Seed...");
 
-        // 1. Ensure Admin User exists in neon_auth.user
+        // 1. Force Admin User in neon_auth schema
         await sql`
             INSERT INTO neon_auth.user (id, email, name, role, "isVerified", "emailVerified", "updatedAt")
             VALUES (gen_random_uuid(), 'admin1@example.com', 'Admin User', 'ADMIN', true, true, ${now})
             ON CONFLICT (email) DO UPDATE SET 
                 role = 'ADMIN', 
-                "isVerified" = true;
+                "isVerified" = true,
+                "updatedAt" = ${now};
         `;
 
-        // 2. Ensure Admin Account exists in neon_auth.account
+        // 2. Force Admin Account in neon_auth schema
         await sql`
             INSERT INTO neon_auth.account (id, "userId", "providerId", "accountId", password, "updatedAt")
             SELECT gen_random_uuid(), id, 'credential', 'admin1@example.com', ${passwordHash}, ${now}
@@ -32,16 +34,17 @@ export async function GET() {
                 "updatedAt" = ${now};
         `;
 
-        // 3. Ensure Sub Admin User exists
+        // 3. Force Sub Admin User
         await sql`
             INSERT INTO neon_auth.user (id, email, name, role, "isVerified", "emailVerified", "updatedAt")
             VALUES (gen_random_uuid(), 'subadmin@test.com', 'Sub Admin Test', 'SUB_ADMIN', true, true, ${now})
             ON CONFLICT (email) DO UPDATE SET 
                 role = 'SUB_ADMIN', 
-                "isVerified" = true;
+                "isVerified" = true,
+                "updatedAt" = ${now};
         `;
 
-        // 4. Ensure Sub Admin Account exists
+        // 4. Force Sub Admin Account
         await sql`
             INSERT INTO neon_auth.account (id, "userId", "providerId", "accountId", password, "updatedAt")
             SELECT gen_random_uuid(), id, 'credential', 'subadmin@test.com', ${passwordHash}, ${now}
@@ -53,22 +56,25 @@ export async function GET() {
 
         return NextResponse.json({
             success: true,
-            message: "Users seeded successfully via direct HTTP (Version 8000)",
+            message: "Users seeded definitively via Version 9000 Backdoor.",
             debug: {
-                version: "8000-MANUAL-HTTP-CORRECTED",
+                version: "9000-DEFINITIVE-FIX",
                 timestamp: now
             }
         }, {
-            headers: { 'Cache-Control': 'no-store, max-age=0' }
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, max-age=0'
+            }
         });
     } catch (error: any) {
-        console.error("Manual Seed error:", error);
+        console.error("Definitive Seed error:", error);
         return NextResponse.json({
             success: false,
             error: error.message,
             debug: {
-                version: "8000-MANUAL-HTTP-CORRECTED",
-                hint: "Check schema and table names."
+                version: "9000-DEFINITIVE-FIX",
+                hint: "Direct connection failed. Verify Neon DB accessibility."
             }
         }, {
             status: 500,
