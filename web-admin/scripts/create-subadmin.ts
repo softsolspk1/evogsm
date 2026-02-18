@@ -29,6 +29,7 @@ async function main() {
                     providerId: 'credential',
                     accountId: 'subadmin@test.com',
                     password: hashedPassword,
+                    updatedAt: new Date(),
                 },
             },
         },
