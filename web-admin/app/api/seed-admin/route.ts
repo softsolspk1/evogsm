@@ -50,25 +50,29 @@ export async function GET() {
             success: true,
             message: "Users seeded successfully",
             debug: {
-                version: "1.0.3-force-eval",
-                hasDbUrl: !!process.env.DATABASE_URL,
-                dbUrlType: typeof process.env.DATABASE_URL,
-                timestamp: "2026-02-18T11:45:00Z"
+                version: "1000-FINAL-FORCE",
+                hasPermanentUrl: true,
+                timestamp: new Date().toISOString()
             },
             users: [
                 { email: admin.email, role: admin.role, password: "password123" },
                 { email: subAdmin.email, role: subAdmin.role, password: "password123" },
             ],
+        }, {
+            headers: { 'Cache-Control': 'no-store, max-age=0' }
         });
     } catch (error: any) {
         return NextResponse.json({
             success: false,
             error: error.message,
             debug: {
-                version: "1.0.3-force-eval",
-                hasDbUrl: !!process.env.DATABASE_URL,
-                dbUrlType: typeof process.env.DATABASE_URL
+                version: "1000-FINAL-FORCE",
+                hasPermanentUrl: true,
+                errorDetail: "Failed at Prisma query"
             }
-        }, { status: 500 });
+        }, {
+            status: 500,
+            headers: { 'Cache-Control': 'no-store, max-age=0' }
+        });
     }
 }
