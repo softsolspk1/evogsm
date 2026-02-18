@@ -50,7 +50,7 @@ export async function GET() {
             success: true,
             message: "Users seeded successfully",
             debug: {
-                version: "1.0.1-hotfix-verified",
+                version: "1.0.3-force-eval",
                 hasDbUrl: !!process.env.DATABASE_URL,
                 dbUrlType: typeof process.env.DATABASE_URL,
                 timestamp: "2026-02-18T11:45:00Z"
@@ -65,7 +65,7 @@ export async function GET() {
             success: false,
             error: error.message,
             debug: {
-                version: "1.0.1-hotfix-verified",
+                version: "1.0.3-force-eval",
                 hasDbUrl: !!process.env.DATABASE_URL,
                 dbUrlType: typeof process.env.DATABASE_URL
             }
