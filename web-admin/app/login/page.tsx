@@ -85,7 +85,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="apple-input bg-white dark:bg-white text-black dark:text-black border-slate-200 focus:border-sky-500 placeholder:text-gray-400"
+                className="apple-input !bg-white !text-black border-slate-200 focus:border-sky-500 placeholder:!text-gray-400"
               />
             </div>
             <div className="space-y-2">
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="apple-input bg-white dark:bg-white text-black dark:text-black border-slate-200 focus:border-sky-500 placeholder:text-gray-400"
+                className="apple-input !bg-white !text-black border-slate-200 focus:border-sky-500 placeholder:!text-gray-400"
               />
             </div>
 
