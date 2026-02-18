@@ -53,8 +53,7 @@ export async function GET() {
             success: true,
             message: "Users seeded successfully",
             debug: {
-                version: "2000-DIRECT-TEST",
-                env_db_url_exists: !!process.env.DATABASE_URL,
+                version: "3000-CLEAN-INIT",
                 timestamp: new Date().toISOString()
             },
             users: [
@@ -69,11 +68,9 @@ export async function GET() {
         return NextResponse.json({
             success: false,
             error: error.message,
-            stack: error.stack,
             debug: {
-                version: "2000-DIRECT-TEST",
-                error_name: error.name,
-                error_code: error.code
+                version: "3000-CLEAN-INIT",
+                error_name: error.name
             }
         }, {
             status: 500,
